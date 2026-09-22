@@ -123,7 +123,36 @@
   * {
     @apply border-border outline-ring/50;
     }
+  html,
+  body {
+    overscroll-behavior-y: none;
+    }
   body {
     @apply bg-background text-foreground;
     }
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+    }
+  a {
+    @apply underline-offset-4;
+    }
+}
+
+@layer utilities {
+  .line-solid {
+    border-color: color-mix(in oklch, var(--border), transparent 18%);
+  }
+
+  .line-dotted {
+    border-color: color-mix(in oklch, var(--border), transparent 8%);
+    border-style: dotted;
+  }
+
+  .kbd-mark {
+    @apply inline-flex h-5 min-w-5 items-center justify-center rounded-md border bg-muted px-1.5 font-mono text-[11px] leading-none text-muted-foreground;
+  }
+
+  .measure-text {
+    text-wrap: pretty;
+  }
 }

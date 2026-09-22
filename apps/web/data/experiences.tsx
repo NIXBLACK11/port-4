@@ -1,0 +1,117 @@
+export const experiences = [
+  {
+    company: 'Stealth Startup',
+    logo: '/globe.svg',
+    location: 'Remote, Europe',
+    role: 'Full Stack Engineer',
+    period: 'May(2026) — PRESENT',
+    description: [
+      'Built products end-to-end as one of 2 engineers across web, mobile, backend, and AI systems.',
+      'Developed Go workers for processing and analyzing application data, documents, and workflows.',
+      'Built real-time Next.js dashboards and a cross-platform Expo app for data visualization and operations.',
+      'Developed AI chat interfaces using MCP, enabling users to interact with data using natural language.',
+    ],
+    skills: [
+      { icon: '/skills/go.png', text: 'Golang' },
+      { icon: '/skills/expo.png', text: 'Expo' },
+      { icon: '/skills/react.png', text: 'React' },
+      { icon: '/skills/next.png', text: 'Next.js' },
+      { icon: '/skills/ml.png', text: 'AI' },
+    ],
+    socials: [],
+  },
+  {
+    company: 'Lokal',
+    logo: '/werate.png',
+    location: 'Remote, Europe',
+    role: 'Full Stack Engineer',
+    period: 'March(2025) — May(2026)',
+    description: [
+      'Built and shipped Expo applications for iOS and Android as part of a small 2-3 engineer team.',
+      'Developed Go workers for AI-powered data enrichment and automated image generation workflows.',
+      'Built Next.js web applications and internal dashboards for managing and monitoring operations.',
+      'Developed serverless TypeScript backend services for application workflows and third-party integrations.',
+    ],
+    skills: [
+      { icon: '/skills/ts.png', text: 'TypeScript' },
+      { icon: '/skills/expo.png', text: 'Expo' },
+      { icon: '/skills/next.png', text: 'Next' },
+      { icon: '/skills/bun.svg', text: 'Bun' },
+      { icon: '/skills/go.png', text: 'Go' },
+      { icon: '/skills/grpc.png', text: 'GRPC' },
+    ],
+    socials: [{ type: 'linkedin', link: 'https://www.linkedin.com/company/lokal-spot/' }],
+  },
+  {
+    company: 'Amatra',
+    logo: '/projects/amatra.png',
+    location: 'Remote',
+    role: 'Founder & Full Stack Engineer',
+    period: 'December(2025) — PRESENT',
+    description: [
+      'Founded and built Amatra, an AI-powered fashion social platform for discovering and sharing outfits.',
+      'Built and launched the Expo app with social features, virtual wardrobes, and AI virtual try-on.',
+      'Integrated Apple subscriptions with verification for managing paid plans and generation limits.',
+      'Developed the Go backend for authentication, payments, media storage, social feeds, and moderation.',
+    ],
+    skills: [
+      { icon: '/skills/expo.png', text: 'Expo' },
+      { icon: '/skills/react.png', text: 'React Native' },
+      { icon: '/skills/go.png', text: 'Golang' },
+      { icon: '/skills/postgresql.png', text: 'PostgreSQL' },
+      { icon: '/skills/gcp.png', text: 'GCP' },
+      { icon: '/skills/ml.png', text: 'AI' },
+    ],
+    socials: [{ type: 'site', link: 'https://amatra.co' }],
+  },
+  {
+    company: 'Meta',
+    logo: '/mlh.jpeg', // Replace with actual logo if available
+    location: 'Remote, New York, NY',
+    role: 'Software Engineering Intern',
+    period: 'September(2023) — December(2023)',
+    description: [
+      'Contributed to Meta open-source projects Laser and Sacremoses, utilized by numerous companies.',
+      'Rectified issues within language lists, enhancing user accessibility and comprehension.',
+      'Attained full parity between Perl and Python scripts in the Sacremoses 0.1.0 release.',
+      'Conducted user demonstrations showcasing the functionalities of the Laser project.',
+    ],
+    skills: [
+      { icon: '/skills/python.png', text: 'Python' },
+      { icon: '/skills/linux.png', text: 'Linux' },
+      { icon: '/skills/ml.png', text: 'Machine Learning' },
+      { icon: '/skills/pytorch.png', text: 'Py-Torch' },
+    ],
+    socials: [
+      { type: 'site', link: 'https://opensource.fb.com/partnerships/major-league-hacking/' },
+      {
+        type: 'linkedin',
+        link: 'https://www.linkedin.com/company/meta-major-league-hacking/',
+      },
+      { type: 'twitter', link: 'https://x.com/MLHacks' },
+    ],
+  },
+  {
+    company: 'Nixarcade',
+    logo: '/nixarcade.png', // Replace with actual logo if available
+    location: 'Remote, India',
+    role: 'Founder',
+    period: 'September(2024) — February(2025)',
+    description: [
+      'Founded Nixarcade, a Solana-powered multiplayer gaming platform.',
+      'Architected the platform using Solana libraries, enabling decentralized transactions for the gaming dApp.',
+      "Secured funding from the Solana Foundation and CoinDCX for the platform's development.",
+    ],
+    skills: [
+      { icon: '/skills/ts.png', text: 'TypeScript' },
+      { icon: '/skills/react.png', text: 'React' },
+      { icon: '/skills/solana.png', text: 'Solana-web3.js' },
+      { icon: '/skills/ws.svg', text: 'Web-Socket' },
+      { icon: '/skills/rust.png', text: 'Rust' },
+    ],
+    socials: [
+      { type: 'site', link: 'https://nixarcade.vercel.app/' },
+      { type: 'twitter', link: 'http://x.com/NIXARCADE' },
+    ],
+  },
+];

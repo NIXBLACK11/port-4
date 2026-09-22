@@ -295,7 +295,7 @@ export function EducationRow({ item }: { item: Education }) {
             src={item.image}
           />
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h3 className="font-medium">{t(item.institution)}</h3>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             {t(item.degree)}

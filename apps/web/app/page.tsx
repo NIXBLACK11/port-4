@@ -237,11 +237,17 @@ function GithubGraph() {
           NIXBLACK11
         </a>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto bg-white dark:bg-transparent">
         {/* eslint-disable-next-line @next/next/no-img-element -- External SVG contribution chart. */}
         <img
           alt="GitHub contribution graph for NIXBLACK11"
-          className="min-h-24 min-w-[620px] opacity-90 dark:invert"
+          className="min-h-24 min-w-[620px] dark:hidden"
+          src="https://ghchart.rshah.org/de91c6/NIXBLACK11"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element -- External SVG contribution chart. */}
+        <img
+          alt="GitHub contribution graph for NIXBLACK11"
+          className="hidden min-h-24 min-w-[620px] opacity-90 invert dark:block"
           src="https://ghchart.rshah.org/NIXBLACK11"
         />
       </div>

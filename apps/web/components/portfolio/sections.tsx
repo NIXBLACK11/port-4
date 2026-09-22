@@ -27,7 +27,7 @@ export function PageBlock({
 }) {
   return (
     <section
-      className={cn("line-solid border-b px-4 py-8 sm:px-6", className)}
+      className={cn("line-solid border-b px-3 py-8 sm:px-6", className)}
       id={id}
     >
       {children}

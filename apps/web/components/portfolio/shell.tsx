@@ -511,8 +511,8 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
   return (
     <PortfolioLanguageContext.Provider value={{ language, setLanguage, copy, t }}>
     <div className="min-h-svh bg-background text-foreground">
-      <div className="mx-auto flex w-full max-w-3xl flex-col px-4 pb-0 sm:px-6 lg:w-1/2 lg:min-w-[680px] lg:px-0">
-        <header className="line-solid sticky top-0 z-30 -mx-4 border-x bg-background/92 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:mx-0">
+      <div className="mx-auto flex w-full max-w-3xl flex-col px-0 pb-0 sm:px-6 lg:w-1/2 lg:min-w-[680px] lg:px-0">
+        <header className="line-solid sticky top-0 z-30 bg-background/92 px-3 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:mx-0 lg:border-x">
           <div className="flex items-center justify-between gap-3">
             <Link href="/" className="flex min-w-0 items-center gap-2.5">
               <span className="line-solid relative size-8 shrink-0 overflow-hidden rounded-full border bg-muted">
@@ -592,16 +592,16 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
         </header>
-        <main className="line-solid border-x">{children}</main>
-        <footer className="line-solid border-x">
-          <div className="line-dotted border-t px-4 py-4 text-xs text-muted-foreground sm:px-6">
+        <main className="line-solid lg:border-x">{children}</main>
+        <footer className="line-solid lg:border-x">
+          <div className="line-dotted border-t px-3 py-4 text-xs text-muted-foreground sm:px-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p>{copy.footer}</p>
               <FooterStats />
             </div>
           </div>
           <div
-            className="flex h-11 justify-center overflow-hidden px-4 sm:h-16 sm:px-6"
+            className="flex h-11 justify-center overflow-hidden px-3 sm:h-16 sm:px-6"
             aria-label="Nix Black"
           >
             <p className="select-none text-center text-[4rem] font-medium leading-none text-muted-foreground/20 sm:text-[6rem]">
@@ -766,7 +766,9 @@ function SearchDialog({
   const router = useRouter()
   const { copy, t } = usePortfolioLanguage()
   const [query, setQuery] = React.useState("")
+  const [activeIndex, setActiveIndex] = React.useState(0)
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const resultRefs = React.useRef<Array<HTMLButtonElement | null>>([])
 
   const results = React.useMemo(() => {
     const needle = query.trim().toLowerCase()
@@ -782,6 +784,15 @@ function SearchDialog({
         .includes(needle)
     )
   }, [query, t])
+  const selectedIndex =
+    results.length > 0 ? Math.min(activeIndex, results.length - 1) : 0
+  const selectedResult = results[selectedIndex]
+
+  React.useEffect(() => {
+    resultRefs.current[selectedIndex]?.scrollIntoView({
+      block: "nearest",
+    })
+  }, [selectedIndex])
 
   React.useEffect(() => {
     const timeout = window.setTimeout(() => inputRef.current?.focus(), 0)
@@ -816,7 +827,35 @@ function SearchDialog({
           <input
             ref={inputRef}
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => {
+              setQuery(event.target.value)
+              setActiveIndex(0)
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowDown") {
+                event.preventDefault()
+                setActiveIndex((current) =>
+                  results.length > 0 ? (current + 1) % results.length : 0
+                )
+                return
+              }
+
+              if (event.key === "ArrowUp") {
+                event.preventDefault()
+                setActiveIndex((current) =>
+                  results.length > 0
+                    ? (current - 1 + results.length) % results.length
+                    : 0
+                )
+                return
+              }
+
+              if (event.key === "Enter" && selectedResult) {
+                event.preventDefault()
+                onOpenChange(false)
+                router.push(selectedResult.href)
+              }
+            }}
             className="h-9 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             placeholder={copy.searchShort}
           />
@@ -824,17 +863,24 @@ function SearchDialog({
         </div>
         <div className="max-h-[56svh] overflow-y-auto p-2">
           {results.length > 0 ? (
-            results.map((item) => {
+            results.map((item, index) => {
               const Icon = item.icon
+              const active = index === selectedIndex
 
               return (
                 <button
+                  ref={(node) => {
+                    resultRefs.current[index] = node
+                  }}
                   className={cn(
                     "line-dotted flex w-full items-start gap-3 rounded-md border-b px-2 py-3 text-left transition-colors last:border-b-0",
-                    "hover:bg-muted focus-visible:bg-muted focus-visible:outline-none"
+                    "hover:bg-muted focus-visible:bg-muted focus-visible:outline-none",
+                    active && "bg-muted"
                   )}
                   key={`${item.href}-${item.title}`}
                   type="button"
+                  aria-selected={active}
+                  onMouseEnter={() => setActiveIndex(index)}
                   onClick={() => {
                     onOpenChange(false)
                     router.push(item.href)

@@ -16,6 +16,13 @@ export type VisitorStats = {
   live: number
 }
 
+export type AnalyticsSummary = {
+  configured: boolean
+  total: number
+  pageviews: number
+  generatedAt: string
+}
+
 type ContactResponse = {
   error?: string
 }
@@ -55,6 +62,15 @@ export function useVisitorStats() {
   })
 }
 
+export function useAnalyticsSummary() {
+  return useQuery({
+    queryKey: ["analytics-summary"],
+    queryFn: fetchAnalyticsSummary,
+    refetchInterval: 60_000,
+    staleTime: 45_000,
+  })
+}
+
 async function sendContactMessage(values: ContactFormValues) {
   const response = await fetch("/api/contact", {
     method: "POST",
@@ -87,6 +103,16 @@ async function pingVisitorStats() {
   }
 
   return (await response.json()) as VisitorStats
+}
+
+async function fetchAnalyticsSummary() {
+  const response = await fetch("/api/analytics?scope=summary")
+
+  if (!response.ok) {
+    throw new Error("Could not load analytics summary.")
+  }
+
+  return (await response.json()) as AnalyticsSummary
 }
 
 function getVisitorId() {

@@ -1,4 +1,5 @@
 import {
+  BarChart3,
   BriefcaseBusiness,
   CircleDashed,
   Code2,
@@ -97,6 +98,7 @@ export const navItems = [
   { label: "Writing", href: "/writing", icon: PenLine },
   { label: "Education", href: "/education", icon: GraduationCap },
   { label: "Contact", href: "/contact", icon: Mail },
+  { label: "Analytics", href: "/analytics", icon: BarChart3 },
 ]
 
 export const projects: Project[] = sourceProjects.map((project) => {
@@ -179,6 +181,7 @@ export const shortcuts = [
   { keys: "G W", label: "Writing" },
   { keys: "G E", label: "Education" },
   { keys: "G C", label: "Contact" },
+  { keys: "G A", label: "Analytics" },
 ]
 
 export const links = [
@@ -224,6 +227,13 @@ export const searchItems: SearchItem[] = [
     href: "/contact",
     description: "Send a project note, collaboration idea, or quick hello.",
     icon: Mail,
+  },
+  {
+    title: "Analytics",
+    eyebrow: "Page",
+    href: "/analytics",
+    description: "View portfolio traffic by country, devices, and referrers.",
+    icon: BarChart3,
   },
   ...projects.map((project) => ({
     title: project.title,

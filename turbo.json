@@ -4,7 +4,8 @@
   "globalEnv": [
     "TELEGRAM_BOT_TOKEN",
     "TELEGRAM_CHAT_ID",
-    "VISITOR_DATA_FILE"
+    "VERCEL_TOKEN",
+    "VERCEL_PROJECT_ID"
   ],
   "tasks": {
     "build": {

@@ -40,6 +40,7 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+    --color-analytics-line: var(--analytics-line);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -74,6 +75,7 @@
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
+    --analytics-line: oklch(0.58 0.24 261);
     --radius: 0.625rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
@@ -109,6 +111,7 @@
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
+    --analytics-line: oklch(0.68 0.22 261);
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
     --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -154,5 +157,91 @@
 
   .measure-text {
     text-wrap: pretty;
+  }
+
+  .analytics-map-marker {
+    --marker-size: 12px;
+    position: relative;
+    display: grid;
+    width: calc(var(--marker-size) * 3);
+    height: calc(var(--marker-size) * 3);
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: var(--foreground);
+    cursor: pointer;
+  }
+
+  .analytics-map-marker-pulse {
+    position: absolute;
+    width: calc(var(--marker-size) * 2.4);
+    height: calc(var(--marker-size) * 2.4);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--background), transparent 15%);
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--foreground), transparent 82%),
+      0 10px 24px color-mix(in oklch, var(--background), transparent 35%);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+
+  .analytics-map-marker-dot {
+    position: relative;
+    width: var(--marker-size);
+    height: var(--marker-size);
+    border: 1px solid color-mix(in oklch, var(--foreground), transparent 42%);
+    border-radius: 999px;
+    background: var(--foreground);
+    box-shadow: 0 0 0 2px color-mix(in oklch, var(--background), transparent 12%);
+    transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+  }
+
+  .analytics-map-marker-label {
+    position: absolute;
+    top: calc(50% + var(--marker-size) + 0.25rem);
+    left: 50%;
+    display: none;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    border: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+    border-radius: var(--radius-sm);
+    background: var(--popover);
+    padding: 0.25rem 0.5rem;
+    color: var(--popover-foreground);
+    font-size: 11px;
+    line-height: 1rem;
+    box-shadow: 0 10px 30px color-mix(in oklch, var(--background), transparent 22%);
+  }
+
+  .analytics-map-marker:hover .analytics-map-marker-pulse,
+  .analytics-map-marker:focus-visible .analytics-map-marker-pulse {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--foreground), transparent 62%),
+      0 10px 24px color-mix(in oklch, var(--background), transparent 35%);
+  }
+
+  .analytics-map-marker:hover .analytics-map-marker-dot,
+  .analytics-map-marker:focus-visible .analytics-map-marker-dot {
+    transform: scale(1.08);
+  }
+
+  .analytics-map-marker:hover .analytics-map-marker-label,
+  .analytics-map-marker:focus-visible .analytics-map-marker-label,
+  .analytics-map-marker-selected .analytics-map-marker-label {
+    display: block;
+  }
+
+  .analytics-map-marker-selected .analytics-map-marker-dot {
+    border-color: var(--foreground);
+    background: var(--background);
+    box-shadow:
+      0 0 0 2px var(--foreground),
+      0 0 0 4px color-mix(in oklch, var(--background), transparent 8%);
+  }
+
+  .analytics-map-marker-selected .analytics-map-marker-pulse {
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--foreground), transparent 55%),
+      0 14px 30px color-mix(in oklch, var(--background), transparent 30%);
   }
 }

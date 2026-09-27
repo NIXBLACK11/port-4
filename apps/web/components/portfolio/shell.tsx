@@ -18,7 +18,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@workspace/ui/lib/utils"
-import { useVisitorStats } from "@/app/contact/hooks"
+import { useAnalyticsSummary, useVisitorStats } from "@/app/contact/hooks"
 import { dataPhraseTranslations } from "@/lib/data-translations"
 import {
   navItems,
@@ -87,6 +87,7 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       Writing: "Writing",
       Education: "Education",
       Contact: "Contact",
+      Analytics: "Analytics",
     },
     search: "Search",
     searchShort: "Search Siddharth's projects, experience, and notes...",
@@ -151,6 +152,7 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       Writing: "Writing",
       Education: "Education",
       Contact: "Contact",
+      Analytics: "Analytics",
     },
     search: "Search",
     searchShort: "Siddharth ke projects, experience, aur notes search karein...",
@@ -216,6 +218,7 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       Writing: "Writing",
       Education: "Education",
       Contact: "Contact",
+      Analytics: "Analytics",
     },
     search: "Search",
     searchShort: "Siddharth のプロジェクト、経験、ノートを検索...",
@@ -298,6 +301,7 @@ const phraseTranslations: Record<Exclude<LanguageCode, "en">, Record<string, str
     "Toggle theme": "Theme badlein",
     "Open search": "Search kholein",
     "Go home": "Home jaayein",
+    Analytics: "Analytics",
     Projects: "Projects",
     Writing: "Writing",
     Education: "Education",
@@ -336,6 +340,7 @@ const phraseTranslations: Record<Exclude<LanguageCode, "en">, Record<string, str
     "Toggle theme": "テーマ切替",
     "Open search": "検索を開く",
     "Go home": "ホームへ",
+    Analytics: "Analytics",
     Projects: "Projects",
     Writing: "Writing",
     Education: "Education",
@@ -460,6 +465,10 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
 
         if (key === "c") {
           router.push("/contact")
+        }
+
+        if (key === "a") {
+          router.push("/analytics")
         }
 
         return
@@ -618,12 +627,17 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
 
 function FooterStats() {
   const { data: stats } = useVisitorStats()
+  const { data: analytics } = useAnalyticsSummary()
+  const total = analytics?.total ?? stats?.total
 
-  return (
-    <div className="flex flex-wrap items-center gap-3 text-[11px]">
+return (
+    <Link
+      href="/analytics"
+      className="flex flex-wrap items-center gap-3 text-[11px] hover:underline"
+    >
       <span className="inline-flex items-center gap-1.5">
         <Users className="size-3" />
-        {formatCompactStat(stats?.total)} total
+        {formatCompactStat(total)} total
       </span>
       <span className="inline-flex items-center gap-1.5">
         <span className="relative flex size-2">
@@ -633,7 +647,7 @@ function FooterStats() {
         <Activity className="size-3" />
         {formatCompactStat(stats?.live)} online
       </span>
-    </div>
+    </Link>
   )
 }
 

@@ -2,7 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query"
 import {
-  BarChart3,
   CalendarDays,
   Eye,
   Globe2,
@@ -51,23 +50,18 @@ function AnalyticsContent() {
 
   return (
     <>
-      <PageBlock className="pt-8 sm:pt-10">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="min-w-0">
-            <p className="mb-2 inline-flex items-center gap-2 text-xs text-muted-foreground">
-              <BarChart3 className="size-4" />
-              Web analytics
-              <span className="text-border">/</span>
-              Last {formatDays(analytics?.range.days ?? rangeDays)}
-            </p>
-            <h1 className="measure-text text-3xl font-medium leading-tight sm:text-4xl">
-              Portfolio traffic
-            </h1>
-            <p className="measure-text mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-              Page views, visitors, geography, devices, and referrers in one
-              quiet dashboard.
-            </p>
-          </div>
+      <PageBlock className="pt-10 sm:pt-12">
+        <p className="text-sm text-muted-foreground">
+          Web analytics / Last {formatDays(analytics?.range.days ?? rangeDays)}
+        </p>
+        <h1 className="measure-text mt-3 text-4xl font-medium leading-tight sm:text-5xl">
+          Portfolio traffic
+        </h1>
+        <p className="measure-text mt-5 text-base leading-7 text-muted-foreground">
+          Page views, visitors, geography, devices, and referrers in one quiet
+          dashboard.
+        </p>
+        <div className="mt-5">
           <RangeSelector value={rangeDays} onChange={setRangeDays} />
         </div>
         {analytics?.configured === false ? (

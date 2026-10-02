@@ -2,7 +2,6 @@ import {
   PiArrowSquareOut,
   PiChatTeardropText,
   PiOpenAiLogo,
-  PiSparkle,
 } from "react-icons/pi"
 import {
   SiClaude,
@@ -40,18 +39,26 @@ const assistantLinks = [
 
 export function AssistantLauncher() {
   return (
-    <details className="group fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
-      <summary
-        className="line-solid flex size-12 cursor-pointer list-none items-center justify-center rounded-full border bg-foreground text-background shadow-lg transition-transform hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 [&::-webkit-details-marker]:hidden"
+    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 mx-auto flex w-full max-w-3xl justify-end px-5 sm:bottom-6 sm:px-8 lg:w-1/2 lg:min-w-[680px] lg:px-4">
+      <input
+        id="portfolio-assistant-launcher"
+        type="checkbox"
+        className="peer sr-only"
+      />
+      <label
+        htmlFor="portfolio-assistant-launcher"
+        className="line-solid pointer-events-auto flex size-12 cursor-pointer items-center justify-center rounded-full border bg-background text-foreground shadow-lg transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
         aria-label="Ask about this portfolio"
       >
         <PiChatTeardropText className="size-6" aria-hidden="true" />
-      </summary>
-      <div className="line-solid absolute bottom-14 right-0 w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-2xl">
-        <div className="line-solid flex items-center gap-2 border-b px-3 py-2.5">
-          <span className="flex size-7 items-center justify-center rounded-md bg-muted text-foreground">
-            <PiSparkle className="size-4" aria-hidden="true" />
-          </span>
+      </label>
+      <label
+        htmlFor="portfolio-assistant-launcher"
+        className="pointer-events-auto fixed inset-0 z-0 hidden cursor-default peer-checked:block"
+        aria-label="Close assistant options"
+      />
+      <div className="line-solid pointer-events-auto absolute bottom-14 right-5 z-10 hidden w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-2xl peer-checked:block sm:right-8 lg:right-4">
+        <div className="line-solid border-b px-3 py-2.5">
           <div className="min-w-0">
             <p className="truncate text-sm font-medium">
               Ask about this portfolio
@@ -86,6 +93,6 @@ export function AssistantLauncher() {
           })}
         </div>
       </div>
-    </details>
+    </div>
   )
 }

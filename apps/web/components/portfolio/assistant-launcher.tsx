@@ -5,7 +5,6 @@ import {
 } from "react-icons/pi"
 import {
   SiClaude,
-  SiGooglegemini,
   SiPerplexity,
 } from "react-icons/si"
 
@@ -24,11 +23,6 @@ const assistantLinks = [
     name: "Claude",
     href: `https://claude.ai/new?q=${encodedPrompt}`,
     icon: SiClaude,
-  },
-  {
-    name: "Gemini",
-    href: `https://gemini.google.com/app?prompt=${encodedPrompt}`,
-    icon: SiGooglegemini,
   },
   {
     name: "Perplexity",

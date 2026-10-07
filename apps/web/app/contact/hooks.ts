@@ -27,26 +27,33 @@ type ContactResponse = {
   error?: string
 }
 
-export function useSendContactMessage() {
+type ContactMessages = {
+  loading: string
+  loadingDescription: string
+  error: string
+  errorFallback: string
+  success: string
+  successDescription: string
+}
+
+export function useSendContactMessage(messages: ContactMessages) {
   return useMutation({
     mutationFn: sendContactMessage,
     onMutate: () =>
-      toast.loading("Sending message", {
-        description: "Forwarding it to Telegram.",
+      toast.loading(messages.loading, {
+        description: messages.loadingDescription,
       }),
     onError: (error, _variables, toastId) => {
-      toast.error("Message not sent", {
+      toast.error(messages.error, {
         id: toastId,
         description:
-          error instanceof Error
-            ? error.message
-            : "Please try again in a moment.",
+          error instanceof Error ? error.message : messages.errorFallback,
       })
     },
     onSuccess: (_data, _variables, toastId) => {
-      toast.success("Message sent", {
+      toast.success(messages.success, {
         id: toastId,
-        description: "I will reply soon.",
+        description: messages.successDescription,
       })
     },
   })
@@ -79,7 +86,9 @@ async function sendContactMessage(values: ContactFormValues) {
     },
     body: JSON.stringify(values),
   })
-  const data = (await response.json().catch(() => null)) as ContactResponse | null
+  const data = (await response
+    .json()
+    .catch(() => null)) as ContactResponse | null
 
   if (!response.ok) {
     throw new Error(data?.error || "Could not send your message.")

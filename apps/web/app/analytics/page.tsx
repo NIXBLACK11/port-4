@@ -14,7 +14,10 @@ import * as React from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { AnalyticsWorldMap } from "@/components/map/analytics-world-map"
-import { PortfolioShell } from "@/components/portfolio/shell"
+import {
+  PortfolioShell,
+  usePortfolioLanguage,
+} from "@/components/portfolio/shell"
 import { PageBlock, SectionHeader } from "@/components/portfolio/sections"
 import type {
   AnalyticsCountry,
@@ -23,11 +26,7 @@ import type {
   AnalyticsPoint,
 } from "@/lib/analytics-data"
 
-const rangeOptions = [
-  { label: "1 day", days: 1 },
-  { label: "7 days", days: 7 },
-  { label: "30 days", days: 30 },
-] as const
+const rangeOptions = [1, 7, 30] as const
 
 export default function AnalyticsPage() {
   return (
@@ -38,35 +37,37 @@ export default function AnalyticsPage() {
 }
 
 function AnalyticsContent() {
+  const { copy } = usePortfolioLanguage()
   const [rangeDays, setRangeDays] = React.useState(30)
   const { data, isLoading, isError } = useAnalytics(rangeDays)
   const analytics = data
   const [selectedCountry, setSelectedCountry] = React.useState("IN")
 
   const selected =
-    analytics?.countries.find((country) => country.country === selectedCountry) ??
-    analytics?.countries[0]
+    analytics?.countries.find(
+      (country) => country.country === selectedCountry
+    ) ?? analytics?.countries[0]
   const activeCountry = selected?.country ?? ""
 
   return (
     <>
       <PageBlock className="pt-10 sm:pt-12">
         <p className="text-sm text-muted-foreground">
-          Web analytics / Last {formatDays(analytics?.range.days ?? rangeDays)}
+          {copy.analytics.eyebrow} / {copy.analytics.last}{" "}
+          {formatDays(analytics?.range.days ?? rangeDays, copy)}
         </p>
-        <h1 className="measure-text mt-3 text-4xl font-medium leading-tight sm:text-5xl">
-          Portfolio traffic
+        <h1 className="measure-text mt-3 text-4xl leading-tight font-medium sm:text-5xl">
+          {copy.analytics.title}
         </h1>
         <p className="measure-text mt-5 text-base leading-7 text-muted-foreground">
-          Page views, visitors, geography, devices, and referrers in one quiet
-          dashboard.
+          {copy.analytics.text}
         </p>
         <div className="mt-5">
           <RangeSelector value={rangeDays} onChange={setRangeDays} />
         </div>
         {analytics?.configured === false ? (
           <div className="line-solid mt-5 rounded-md border bg-muted/20 px-3 py-2 text-xs leading-5 text-muted-foreground">
-            Vercel Analytics is not configured for this environment yet.
+            {copy.analytics.unconfigured}
           </div>
         ) : null}
       </PageBlock>
@@ -79,21 +80,21 @@ function AnalyticsContent() {
             <div className="grid sm:grid-cols-3">
               <StatCard
                 icon={Eye}
-                label="Page Views"
+                label={copy.analytics.pageViews}
                 value={analytics.totals.pageviews}
-                note={`${formatDays(analytics.range.days)} range`}
+                note={`${formatDays(analytics.range.days, copy)} ${copy.analytics.range}`}
               />
               <StatCard
                 icon={Users}
-                label="Visitors"
+                label={copy.analytics.visitors}
                 value={analytics.totals.visitors}
-                note="Unique viewers"
+                note={copy.analytics.uniqueViewers}
               />
               <StatCard
                 icon={Radio}
-                label="Top Country"
+                label={copy.analytics.topCountry}
                 value={selected?.visitors ?? 0}
-                note={selected?.name ?? "Waiting for data"}
+                note={selected?.name ?? copy.analytics.waitingForData}
               />
             </div>
             <LineChart data={analytics.daily} />
@@ -130,16 +131,19 @@ function AnalyticsContent() {
           </PageBlock>
 
           <PageBlock>
-            <SectionHeader eyebrow="Breakdown" title="Devices and referrers" />
+            <SectionHeader
+              eyebrow={copy.analytics.breakdown}
+              title={copy.analytics.devicesAndReferrers}
+            />
             <div className="grid gap-3 sm:grid-cols-2">
               <DimensionList
                 icon={MousePointer2}
-                title="Devices"
+                title={copy.analytics.devices}
                 items={analytics.devices}
               />
               <DimensionList
                 icon={Globe2}
-                title="Referrers"
+                title={copy.analytics.referrers}
                 items={analytics.referrers}
               />
             </div>
@@ -151,13 +155,15 @@ function AnalyticsContent() {
 }
 
 function useAnalytics(days: number) {
+  const { copy } = usePortfolioLanguage()
+
   return useQuery({
     queryKey: ["analytics-dashboard", days],
     queryFn: async () => {
       const response = await fetch(`/api/analytics?days=${days}`)
 
       if (!response.ok) {
-        throw new Error("Could not load analytics.")
+        throw new Error(copy.analytics.couldNotLoad)
       }
 
       return (await response.json()) as AnalyticsPayload
@@ -174,19 +180,21 @@ function RangeSelector({
   value: number
   onChange: (days: number) => void
 }) {
+  const { copy } = usePortfolioLanguage()
+
   return (
     <div className="line-solid flex w-fit items-center gap-1 rounded-md border bg-background p-1">
       <CalendarDays className="ml-1.5 size-3.5 text-muted-foreground" />
-      {rangeOptions.map((option) => (
+      {rangeOptions.map((days) => (
         <Button
           className="h-7 rounded-sm px-2 text-xs"
-          key={option.days}
+          key={days}
           size="sm"
           type="button"
-          variant={value === option.days ? "default" : "ghost"}
-          onClick={() => onChange(option.days)}
+          variant={value === days ? "default" : "ghost"}
+          onClick={() => onChange(days)}
         >
-          {option.label}
+          {formatDays(days, copy)}
         </Button>
       ))}
     </div>
@@ -205,7 +213,7 @@ function StatCard({
   note: string
 }) {
   return (
-    <div className="line-solid border-b p-4 sm:border-b-0 sm:border-r sm:last:border-r-0">
+    <div className="line-solid border-b p-4 sm:border-r sm:border-b-0 sm:last:border-r-0">
       <div className="flex items-center justify-between gap-3 text-xs font-medium text-muted-foreground">
         <span>{label}</span>
         <Icon className="size-3.5" />
@@ -227,10 +235,12 @@ function CountryStrip({
   selectedCountry: string
   onSelectCountry: (country: string) => void
 }) {
+  const { copy } = usePortfolioLanguage()
+
   if (countries.length === 0) {
     return (
       <p className="text-xs text-muted-foreground">
-        No country data for this range.
+        {copy.analytics.noCountryData}
       </p>
     )
   }
@@ -247,7 +257,9 @@ function CountryStrip({
           onClick={() => onSelectCountry(country.country)}
         >
           <span>{country.country}</span>
-          <span className="text-current/60">{formatNumber(country.visitors)}</span>
+          <span className="text-current/60">
+            {formatNumber(country.visitors)}
+          </span>
         </Button>
       ))}
     </div>
@@ -255,20 +267,22 @@ function CountryStrip({
 }
 
 function CountryDetail({ country }: { country: AnalyticsCountry }) {
+  const { copy } = usePortfolioLanguage()
+
   return (
     <div className="line-solid rounded-lg border bg-background p-4 xl:min-h-[460px]">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm font-medium">{country.name}</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            {country.country} selected
+            {country.country} {copy.analytics.selected}
           </p>
         </div>
         <Globe2 className="size-4 text-muted-foreground" />
       </div>
       <div className="mt-8 grid gap-3">
-        <Metric label="Visitors" value={country.visitors} />
-        <Metric label="Pageviews" value={country.pageviews} />
+        <Metric label={copy.analytics.visitors} value={country.visitors} />
+        <Metric label={copy.analytics.pageviews} value={country.pageviews} />
       </div>
     </div>
   )
@@ -277,18 +291,20 @@ function CountryDetail({ country }: { country: AnalyticsCountry }) {
 function Metric({ label, value }: { label: string; value: number }) {
   return (
     <div className="line-dotted border-t py-3">
-      <p className="text-[11px] uppercase text-muted-foreground">{label}</p>
+      <p className="text-[11px] text-muted-foreground uppercase">{label}</p>
       <p className="mt-1 text-2xl font-medium">{formatNumber(value)}</p>
     </div>
   )
 }
 
 function LineChart({ data }: { data: AnalyticsPoint[] }) {
+  const { copy } = usePortfolioLanguage()
+
   if (data.length === 0) {
     return (
       <div className="line-solid border-t px-4 py-5">
         <div className="grid h-64 place-items-center text-sm text-muted-foreground">
-          No page view data for this range.
+          {copy.analytics.noPageViewData}
         </div>
       </div>
     )
@@ -307,7 +323,11 @@ function LineChart({ data }: { data: AnalyticsPoint[] }) {
   return (
     <div className="line-solid border-t px-4 py-5">
       <div className="h-64 w-full">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="size-full">
+        <svg
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          className="size-full"
+        >
           <g className="text-border">
             {[20, 40, 60, 80].map((y) => (
               <line
@@ -345,7 +365,9 @@ function LineChart({ data }: { data: AnalyticsPoint[] }) {
         {data.slice(-5).map((point) => (
           <div className="line-dotted border-t pt-2" key={point.label}>
             <p>{point.label}</p>
-            <p className="mt-1 text-foreground">{formatNumber(point.pageviews)}</p>
+            <p className="mt-1 text-foreground">
+              {formatNumber(point.pageviews)}
+            </p>
           </div>
         ))}
       </div>
@@ -362,6 +384,7 @@ function DimensionList({
   title: string
   items: AnalyticsDimension[]
 }) {
+  const { copy } = usePortfolioLanguage()
   const max = Math.max(...items.map((item) => item.visitors), 1)
 
   return (
@@ -371,18 +394,21 @@ function DimensionList({
           <Icon className="size-4 text-muted-foreground" />
           {title}
         </h3>
-        <span className="text-[11px] uppercase text-muted-foreground">
-          Visitors
+        <span className="text-[11px] text-muted-foreground uppercase">
+          {copy.analytics.visitors}
         </span>
       </div>
       <div className="px-4 py-2">
         {items.length === 0 ? (
           <p className="py-6 text-sm text-muted-foreground">
-            No data for this range.
+            {copy.analytics.noData}
           </p>
         ) : null}
         {items.map((item) => (
-          <div className="line-dotted border-b py-3 last:border-b-0" key={item.label}>
+          <div
+            className="line-dotted border-b py-3 last:border-b-0"
+            key={item.label}
+          >
             <div className="flex items-center justify-between gap-3 text-xs">
               <span className="truncate">{item.label}</span>
               <span className="text-muted-foreground">
@@ -392,7 +418,9 @@ function DimensionList({
             <div className="mt-2 h-px overflow-hidden bg-muted">
               <div
                 className="h-full bg-foreground"
-                style={{ width: `${Math.max((item.visitors / max) * 100, 4)}%` }}
+                style={{
+                  width: `${Math.max((item.visitors / max) * 100, 4)}%`,
+                }}
               />
             </div>
           </div>
@@ -409,7 +437,7 @@ function LoadingPanel() {
         <div className="grid sm:grid-cols-3">
           {Array.from({ length: 3 }).map((_, index) => (
             <div
-              className="line-solid border-b p-4 sm:border-b-0 sm:border-r sm:last:border-r-0"
+              className="line-solid border-b p-4 sm:border-r sm:border-b-0 sm:last:border-r-0"
               key={`stat-skeleton-${index}`}
             >
               <div className="flex items-center justify-between gap-3">
@@ -430,9 +458,11 @@ function LoadingPanel() {
 }
 
 function ErrorPanel() {
+  const { copy } = usePortfolioLanguage()
+
   return (
     <div className="line-solid my-8 rounded-lg border p-3 text-sm text-muted-foreground">
-      Analytics could not be loaded right now.
+      {copy.analytics.loadError}
     </div>
   )
 }
@@ -443,6 +473,11 @@ function formatNumber(value: number) {
   }).format(value)
 }
 
-function formatDays(days: number) {
-  return days === 1 ? "1 day" : `${days} days`
+function formatDays(
+  days: number,
+  copy: ReturnType<typeof usePortfolioLanguage>["copy"]
+) {
+  return days === 1
+    ? `1 ${copy.analytics.day}`
+    : `${days} ${copy.analytics.days}`
 }

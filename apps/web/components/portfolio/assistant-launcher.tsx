@@ -3,10 +3,7 @@ import {
   PiChatTeardropText,
   PiOpenAiLogo,
 } from "react-icons/pi"
-import {
-  SiClaude,
-  SiPerplexity,
-} from "react-icons/si"
+import { SiClaude, SiPerplexity } from "react-icons/si"
 
 const portfolioPrompt =
   "You are helping me understand Siddharth Singh Rana's portfolio. Review https://nixblack.com and answer questions about his projects, writing, education, contact information, and experience."
@@ -31,7 +28,15 @@ const assistantLinks = [
   },
 ] as const
 
-export function AssistantLauncher() {
+export function AssistantLauncher({
+  copy,
+}: {
+  copy: {
+    ask: string
+    close: string
+    choose: string
+  }
+}) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 mx-auto flex w-full max-w-3xl justify-end px-5 sm:bottom-6 sm:px-8 lg:w-1/2 lg:min-w-[680px] lg:px-4">
       <input
@@ -41,24 +46,22 @@ export function AssistantLauncher() {
       />
       <label
         htmlFor="portfolio-assistant-launcher"
-        className="line-solid pointer-events-auto flex size-12 cursor-pointer items-center justify-center rounded-full border bg-background text-foreground shadow-lg transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-        aria-label="Ask about this portfolio"
+        className="line-solid pointer-events-auto flex size-12 cursor-pointer items-center justify-center rounded-full border bg-background text-foreground shadow-lg transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+        aria-label={copy.ask}
       >
         <PiChatTeardropText className="size-6" aria-hidden="true" />
       </label>
       <label
         htmlFor="portfolio-assistant-launcher"
         className="pointer-events-auto fixed inset-0 z-0 hidden cursor-default peer-checked:block"
-        aria-label="Close assistant options"
+        aria-label={copy.close}
       />
-      <div className="line-solid pointer-events-auto absolute bottom-14 right-5 z-10 hidden w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-2xl peer-checked:block sm:right-8 lg:right-4">
+      <div className="line-solid pointer-events-auto absolute right-5 bottom-14 z-10 hidden w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-2xl peer-checked:block sm:right-8 lg:right-4">
         <div className="line-solid border-b px-3 py-2.5">
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium">
-              Ask about this portfolio
-            </p>
+            <p className="truncate text-sm font-medium">{copy.ask}</p>
             <p className="truncate text-xs text-muted-foreground">
-              Choose your assistant
+              {copy.choose}
             </p>
           </div>
         </div>

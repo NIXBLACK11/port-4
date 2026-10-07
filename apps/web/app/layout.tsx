@@ -4,7 +4,6 @@ import { Analytics } from "@vercel/analytics/next"
 
 import "@workspace/ui/globals.css"
 import { AppProviders } from "@/components/app-providers"
-import { AssistantLauncher } from "@/components/portfolio/assistant-launcher"
 import { cn } from "@workspace/ui/lib/utils"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
@@ -32,7 +31,6 @@ export default function RootLayout({
     >
       <body>
         <AppProviders>{children}</AppProviders>
-        <AssistantLauncher />
         <Analytics />
       </body>
     </html>
@@ -49,8 +47,7 @@ export const metadata: Metadata = {
     default: title,
     template: "%s | nixblack",
   },
-  description:
-    description,
+  description: description,
   applicationName: title,
   authors: [{ name: "Siddharth Singh Rana", url: "https://nixblack.com" }],
   creator: "Siddharth Singh Rana",

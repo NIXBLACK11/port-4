@@ -19,12 +19,9 @@ import {
 
 import { cn } from "@workspace/ui/lib/utils"
 import { useAnalyticsSummary, useVisitorStats } from "@/app/contact/hooks"
+import { AssistantLauncher } from "@/components/portfolio/assistant-launcher"
 import { dataPhraseTranslations } from "@/lib/data-translations"
-import {
-  navItems,
-  profile,
-  searchItems,
-} from "@/lib/portfolio-data"
+import { navItems, profile, searchItems } from "@/lib/portfolio-data"
 
 type LanguageCode = "en" | "hi" | "ja"
 
@@ -33,6 +30,9 @@ type PortfolioCopy = {
   search: string
   searchShort: string
   footer: string
+  total: string
+  online: string
+  escape: string
   noResults: string
   staticIndex: string
   result: string
@@ -58,6 +58,7 @@ type PortfolioCopy = {
   }
   theme: Record<"system" | "light" | "dark", string>
   language: string
+  languages: Record<LanguageCode, string>
   home: {
     heroName: string
     intro: string
@@ -77,6 +78,61 @@ type PortfolioCopy = {
     shortcutsEyebrow: string
     shortcutsTitle: string
   }
+  contact: {
+    messageEyebrow: string
+    messageTitle: string
+    company: string
+    fullName: string
+    fullNamePlaceholder: string
+    phone: string
+    phonePlaceholder: string
+    email: string
+    emailPlaceholder: string
+    message: string
+    messagePlaceholder: string
+    sending: string
+    send: string
+    requiredError: string
+    requiredErrorDescription: string
+    loading: string
+    loadingDescription: string
+    error: string
+    errorFallback: string
+    success: string
+    successDescription: string
+  }
+  analytics: {
+    eyebrow: string
+    last: string
+    title: string
+    text: string
+    unconfigured: string
+    pageViews: string
+    visitors: string
+    topCountry: string
+    range: string
+    uniqueViewers: string
+    waitingForData: string
+    selected: string
+    pageviews: string
+    noCountryData: string
+    noPageViewData: string
+    breakdown: string
+    devicesAndReferrers: string
+    devices: string
+    referrers: string
+    worldMapLabel: string
+    noData: string
+    loadError: string
+    couldNotLoad: string
+    day: string
+    days: string
+  }
+  assistant: {
+    ask: string
+    close: string
+    choose: string
+  }
 }
 
 const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
@@ -92,6 +148,9 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
     search: "Search",
     searchShort: "Search Siddharth's projects, experience, and notes...",
     footer: "Built by Siddharth Singh Rana with Next.js and TypeScript.",
+    total: "total",
+    online: "online",
+    escape: "Esc",
     noResults: "No matching portfolio entry yet.",
     staticIndex: "Portfolio index",
     result: "result",
@@ -100,19 +159,22 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
     closeDetails: "Close details",
     pages: {
       projectsEyebrow: "Projects",
-      projectsTitle: "Products, research, and experiments shipped across web, AI, and Solana.",
+      projectsTitle:
+        "Products, research, and experiments shipped across web, AI, and Solana.",
       projectsText:
         "A collection of real work: funded Solana products, AI tools, developer utilities, and early experiments that shaped how I build.",
       projectsArchiveEyebrow: "Portfolio",
       projectsArchiveTitle: "All projects",
       writingEyebrow: "Writing",
-      writingTitle: "Notes from building backend systems, interfaces, and developer tools.",
+      writingTitle:
+        "Notes from building backend systems, interfaces, and developer tools.",
       writingText:
         "Engineering notes from the tools I use in production, including Go, TypeScript, gRPC, and distributed application patterns.",
       writingIndexEyebrow: "Index",
       writingIndexTitle: "All notes",
       educationEyebrow: "Education",
-      educationTitle: "Computer science, research practice, and the base I build from.",
+      educationTitle:
+        "Computer science, research practice, and the base I build from.",
       educationText:
         "My academic path from St. Joseph's College in Nainital to a B.Tech in Computer Science and Engineering at Graphic Era Hill University.",
       educationListEyebrow: "Background",
@@ -124,6 +186,11 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       dark: "Dark",
     },
     language: "Language",
+    languages: {
+      en: "English",
+      hi: "Hindi",
+      ja: "Japanese",
+    },
     home: {
       heroName: profile.name,
       intro: profile.intro,
@@ -137,12 +204,68 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       systemTitle: "What I keep coming back to",
       recommendationEyebrow: "Recommendation",
       recommendationTitle: "A note from Meta",
-      contactEyebrow: "Contact",
+      contactEyebrow: "Sampark",
       contactTitle: "Have something in mind?",
       contactText:
         "If you're building software across web, AI, backend systems, or Web3, I'd love to hear what you're working on.",
       shortcutsEyebrow: "Shortcuts",
       shortcutsTitle: "Fast paths",
+    },
+    contact: {
+      messageEyebrow: "Message",
+      messageTitle: "Send a message",
+      company: "Company",
+      fullName: "Full Name *",
+      fullNamePlaceholder: "Full Name",
+      phone: "Phone",
+      phonePlaceholder: "Phone No",
+      email: "Email *",
+      emailPlaceholder: "you@example.com",
+      message: "Message *",
+      messagePlaceholder: "Tell me about your project or just say hi...",
+      sending: "Sending...",
+      send: "Send message",
+      requiredError: "Please check the required fields",
+      requiredErrorDescription: "Name, email, and message are needed.",
+      loading: "Sending message",
+      loadingDescription: "Forwarding it to Telegram.",
+      error: "Message not sent",
+      errorFallback: "Please try again in a moment.",
+      success: "Message sent",
+      successDescription: "I will reply soon.",
+    },
+    analytics: {
+      eyebrow: "Web analytics",
+      last: "Last",
+      title: "Portfolio traffic",
+      text: "Page views, visitors, geography, devices, and referrers in one quiet dashboard.",
+      unconfigured:
+        "Vercel Analytics is not configured for this environment yet.",
+      pageViews: "Page Views",
+      visitors: "Visitors",
+      topCountry: "Top Country",
+      range: "range",
+      uniqueViewers: "Unique viewers",
+      waitingForData: "Waiting for data",
+      selected: "selected",
+      pageviews: "Pageviews",
+      noCountryData: "No country data for this range.",
+      noPageViewData: "No page view data for this range.",
+      breakdown: "Breakdown",
+      devicesAndReferrers: "Devices and referrers",
+      devices: "Devices",
+      referrers: "Referrers",
+      worldMapLabel: "World map showing analytics by country",
+      noData: "No data for this range.",
+      loadError: "Analytics could not be loaded right now.",
+      couldNotLoad: "Could not load analytics.",
+      day: "day",
+      days: "days",
+    },
+    assistant: {
+      ask: "Ask about this portfolio",
+      close: "Close assistant options",
+      choose: "Choose your assistant",
     },
   },
   hi: {
@@ -155,8 +278,13 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       Analytics: "Analytics",
     },
     search: "Search",
-    searchShort: "Siddharth ke projects, experience, aur notes search karein...",
-    footer: "Siddharth Singh Rana ne Next.js aur TypeScript ke saath build kiya.",
+    searchShort:
+      "Siddharth ke projects, experience, aur notes search karein...",
+    footer:
+      "Siddharth Singh Rana ne Next.js aur TypeScript ke saath build kiya.",
+    total: "total",
+    online: "online",
+    escape: "Esc",
     noResults: "Abhi matching portfolio entry nahi mili.",
     staticIndex: "Portfolio index",
     result: "result",
@@ -165,19 +293,22 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
     closeDetails: "Details close karein",
     pages: {
       projectsEyebrow: "Projects",
-      projectsTitle: "Web, AI, aur Solana par ship kiye gaye products, research, aur experiments.",
+      projectsTitle:
+        "Web, AI, aur Solana par ship kiye gaye products, research, aur experiments.",
       projectsText:
         "Real work ka collection: funded Solana products, AI tools, developer utilities, aur early experiments jinhone meri building style shape ki.",
       projectsArchiveEyebrow: "Portfolio",
       projectsArchiveTitle: "Saare projects",
       writingEyebrow: "Writing",
-      writingTitle: "Backend systems, interfaces, aur developer tools build karne se notes.",
+      writingTitle:
+        "Backend systems, interfaces, aur developer tools build karne se notes.",
       writingText:
         "Production mein use hone wale tools par engineering notes, including Go, TypeScript, gRPC, aur distributed application patterns.",
       writingIndexEyebrow: "Index",
       writingIndexTitle: "Saare notes",
       educationEyebrow: "Education",
-      educationTitle: "Computer science, research practice, aur woh base jisse main build karta hoon.",
+      educationTitle:
+        "Computer science, research practice, aur woh base jisse main build karta hoon.",
       educationText:
         "Mera academic path St. Joseph's College, Nainital se Graphic Era Hill University mein B.Tech Computer Science and Engineering tak.",
       educationListEyebrow: "Background",
@@ -189,6 +320,11 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       dark: "Dark",
     },
     language: "Language",
+    languages: {
+      en: "English",
+      hi: "Hindi",
+      ja: "Japanese",
+    },
     home: {
       heroName: profile.name,
       intro:
@@ -210,6 +346,63 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       shortcutsEyebrow: "Shortcuts",
       shortcutsTitle: "Fast paths",
     },
+    contact: {
+      messageEyebrow: "Sandesh",
+      messageTitle: "Sandesh bhejein",
+      company: "Company",
+      fullName: "Poora naam *",
+      fullNamePlaceholder: "Poora naam",
+      phone: "Phone",
+      phonePlaceholder: "Phone number",
+      email: "Email *",
+      emailPlaceholder: "you@example.com",
+      message: "Sandesh *",
+      messagePlaceholder:
+        "Apne project ke baare mein batayein ya sirf hi bolein...",
+      sending: "Bheja ja raha hai...",
+      send: "Sandesh bhejein",
+      requiredError: "Required fields check karein",
+      requiredErrorDescription: "Name, email, aur message zaroori hain.",
+      loading: "Message bheja ja raha hai",
+      loadingDescription: "Telegram par forward ho raha hai.",
+      error: "Message nahi bheja gaya",
+      errorFallback: "Thodi der baad phir try karein.",
+      success: "Message bhej diya gaya",
+      successDescription: "Main jald reply karunga.",
+    },
+    analytics: {
+      eyebrow: "Traffic analytics",
+      last: "Pichhle",
+      title: "Portfolio traffic overview",
+      text: "Page views, visitors, geography, devices, aur referrers ka dashboard.",
+      unconfigured:
+        "Is environment ke liye Vercel Analytics abhi configured nahi hai.",
+      pageViews: "Page views",
+      visitors: "Visitors",
+      topCountry: "Top country",
+      range: "range",
+      uniqueViewers: "Unique viewers",
+      waitingForData: "Data ka wait ho raha hai",
+      selected: "selected",
+      pageviews: "Pageviews",
+      noCountryData: "Is range ke liye country data nahi hai.",
+      noPageViewData: "Is range ke liye page view data nahi hai.",
+      breakdown: "Breakdown",
+      devicesAndReferrers: "Devices aur referrers",
+      devices: "Devices",
+      referrers: "Referrers",
+      worldMapLabel: "Country ke hisaab se analytics dikhane wala world map",
+      noData: "Is range ke liye data nahi hai.",
+      loadError: "Analytics abhi load nahi ho paya.",
+      couldNotLoad: "Analytics load nahi ho paya.",
+      day: "din",
+      days: "din",
+    },
+    assistant: {
+      ask: "Is portfolio ke baare mein poochein",
+      close: "Assistant options close karein",
+      choose: "Apna assistant chunein",
+    },
   },
   ja: {
     nav: {
@@ -223,6 +416,9 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
     search: "Search",
     searchShort: "Siddharth のプロジェクト、経験、ノートを検索...",
     footer: "Siddharth Singh Rana が Next.js と TypeScript で構築。",
+    total: "total",
+    online: "online",
+    escape: "Esc",
     noResults: "一致するポートフォリオ項目はまだありません。",
     staticIndex: "Portfolio index",
     result: "result",
@@ -237,7 +433,8 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       projectsArchiveEyebrow: "Portfolio",
       projectsArchiveTitle: "All projects",
       writingEyebrow: "Writing",
-      writingTitle: "バックエンドシステム、インターフェース、開発者ツールを作る中でのノート。",
+      writingTitle:
+        "バックエンドシステム、インターフェース、開発者ツールを作る中でのノート。",
       writingText:
         "Go、TypeScript、gRPC、分散アプリケーションのパターンなど、実際に使っている技術についての短いメモです。",
       writingIndexEyebrow: "Index",
@@ -255,6 +452,11 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       dark: "Dark",
     },
     language: "Language",
+    languages: {
+      en: "English",
+      hi: "Hindi",
+      ja: "Japanese",
+    },
     home: {
       heroName: profile.name,
       intro:
@@ -269,12 +471,68 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       systemTitle: "繰り返し大切にしていること",
       recommendationEyebrow: "Recommendation",
       recommendationTitle: "A note from Meta",
-      contactEyebrow: "Contact",
-      contactTitle: "Have something in mind?",
+      contactEyebrow: "お問い合わせ",
+      contactTitle: "一緒に作りたいものがありますか？",
       contactText:
         "Web、AI、バックエンド、Web3 の領域でソフトウェアを作っているなら、ぜひ話を聞かせてください。",
       shortcutsEyebrow: "Shortcuts",
       shortcutsTitle: "Fast paths",
+    },
+    contact: {
+      messageEyebrow: "メッセージ",
+      messageTitle: "メッセージを送る",
+      company: "Company",
+      fullName: "お名前 *",
+      fullNamePlaceholder: "お名前",
+      phone: "電話番号",
+      phonePlaceholder: "電話番号",
+      email: "Email *",
+      emailPlaceholder: "you@example.com",
+      message: "メッセージ *",
+      messagePlaceholder:
+        "プロジェクトについて、または気軽にメッセージを書いてください...",
+      sending: "送信中...",
+      send: "メッセージを送る",
+      requiredError: "必須項目を確認してください",
+      requiredErrorDescription: "名前、メール、メッセージが必要です。",
+      loading: "メッセージを送信中",
+      loadingDescription: "Telegram に転送しています。",
+      error: "メッセージを送信できませんでした",
+      errorFallback: "少し待ってからもう一度お試しください。",
+      success: "メッセージを送信しました",
+      successDescription: "近日中に返信します。",
+    },
+    analytics: {
+      eyebrow: "アクセス解析",
+      last: "過去",
+      title: "ポートフォリオのトラフィック",
+      text: "ページビュー、訪問者、地域、デバイス、リファラーを静かなダッシュボードにまとめています。",
+      unconfigured: "この環境では Vercel Analytics がまだ設定されていません。",
+      pageViews: "ページビュー",
+      visitors: "訪問者",
+      topCountry: "上位の国",
+      range: "期間",
+      uniqueViewers: "ユニーク訪問者",
+      waitingForData: "データ待ち",
+      selected: "選択中",
+      pageviews: "ページビュー",
+      noCountryData: "この期間の国別データはありません。",
+      noPageViewData: "この期間のページビューはありません。",
+      breakdown: "内訳",
+      devicesAndReferrers: "デバイスと参照元",
+      devices: "デバイス",
+      referrers: "参照元",
+      worldMapLabel: "国別の analytics を表示する世界地図",
+      noData: "この期間のデータはありません。",
+      loadError: "現在、Analytics を読み込めません。",
+      couldNotLoad: "Analytics を読み込めませんでした。",
+      day: "日",
+      days: "日",
+    },
+    assistant: {
+      ask: "このポートフォリオについて質問",
+      close: "アシスタント選択を閉じる",
+      choose: "アシスタントを選択",
     },
   },
 }
@@ -285,7 +543,12 @@ const languageLabels: Record<LanguageCode, string> = {
   ja: "JA",
 }
 
-const phraseTranslations: Record<Exclude<LanguageCode, "en">, Record<string, string>> = {
+const portfolioLanguageStorageKey = "portfolio-language"
+
+const phraseTranslations: Record<
+  Exclude<LanguageCode, "en">,
+  Record<string, string>
+> = {
   hi: {
     "Full Stack Engineer & Founder": "Full Stack Engineer & Founder",
     "Remote, India": "Remote, India",
@@ -301,6 +564,7 @@ const phraseTranslations: Record<Exclude<LanguageCode, "en">, Record<string, str
     "Toggle theme": "Theme badlein",
     "Open search": "Search kholein",
     "Go home": "Home jaayein",
+    at: "at",
     Analytics: "Analytics",
     Projects: "Projects",
     Writing: "Writing",
@@ -324,6 +588,13 @@ const phraseTranslations: Record<Exclude<LanguageCode, "en">, Record<string, str
       "Shipped products, AI tools, Solana apps, aur developer utilities explore karein.",
     "Read notes about Go, TypeScript, gRPC, and backend engineering.":
       "Go, TypeScript, gRPC, aur backend engineering par notes padhein.",
+    "Send a project note, collaboration idea, or quick hello.":
+      "Project note, collaboration idea, ya quick hello bhejein.",
+    "View portfolio traffic by country, devices, and referrers.":
+      "Country, devices, aur referrers ke hisaab se portfolio traffic dekhein.",
+    "GitHub activity": "GitHub activity",
+    "Nainital sits at about 2,084m in the Kumaon hills. Lake air, sharp light, and mountain silence do most of the design work.":
+      "Nainital Kumaon hills mein lagbhag 2,084m par hai. Lake ki hawa, sharp light, aur pahaadon ki silence design ka kaafi kaam khud kar deti hai.",
   },
   ja: {
     "Full Stack Engineer & Founder": "Full Stack Engineer & Founder",
@@ -340,6 +611,7 @@ const phraseTranslations: Record<Exclude<LanguageCode, "en">, Record<string, str
     "Toggle theme": "テーマ切替",
     "Open search": "検索を開く",
     "Go home": "ホームへ",
+    at: "at",
     Analytics: "Analytics",
     Projects: "Projects",
     Writing: "Writing",
@@ -363,6 +635,13 @@ const phraseTranslations: Record<Exclude<LanguageCode, "en">, Record<string, str
       "公開したプロダクト、AI ツール、Solana アプリ、開発者向けユーティリティを見る。",
     "Read notes about Go, TypeScript, gRPC, and backend engineering.":
       "Go、TypeScript、gRPC、バックエンドエンジニアリングについてのノートを読む。",
+    "Send a project note, collaboration idea, or quick hello.":
+      "プロジェクトの相談、コラボのアイデア、短い挨拶を送る。",
+    "View portfolio traffic by country, devices, and referrers.":
+      "国、デバイス、リファラー別にポートフォリオのアクセスを見る。",
+    "GitHub activity": "GitHub activity",
+    "Nainital sits at about 2,084m in the Kumaon hills. Lake air, sharp light, and mountain silence do most of the design work.":
+      "Nainital は Kumaon の丘陵地帯、標高約2,084mにあります。湖の空気、澄んだ光、山の静けさがデザインの多くを形づくります。",
   },
 }
 
@@ -372,6 +651,10 @@ const PortfolioLanguageContext = React.createContext<{
   copy: PortfolioCopy
   t: (value: string) => string
 } | null>(null)
+
+function isLanguageCode(value: string | null): value is LanguageCode {
+  return value === "en" || value === "hi" || value === "ja"
+}
 
 export function usePortfolioLanguage() {
   const context = React.useContext(PortfolioLanguageContext)
@@ -406,13 +689,11 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
       return "en"
     }
 
-    const savedLanguage = window.localStorage.getItem("portfolio-language")
+    const savedLanguage = window.localStorage.getItem(
+      portfolioLanguageStorageKey
+    )
 
-    if (
-      savedLanguage === "en" ||
-      savedLanguage === "hi" ||
-      savedLanguage === "ja"
-    ) {
+    if (isLanguageCode(savedLanguage)) {
       return savedLanguage
     }
 
@@ -422,7 +703,11 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      if (event.defaultPrevented || event.repeat || isTypingTarget(event.target)) {
+      if (
+        event.defaultPrevented ||
+        event.repeat ||
+        isTypingTarget(event.target)
+      ) {
         return
       }
 
@@ -502,125 +787,150 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
 
   function setLanguage(nextLanguage: LanguageCode) {
     setLanguageState(nextLanguage)
-    window.localStorage.setItem("portfolio-language", nextLanguage)
+    window.localStorage.setItem(portfolioLanguageStorageKey, nextLanguage)
   }
 
-  function t(value: string) {
+  function t(value: string): string {
     if (language === "en") {
+      return value
+    }
+
+    const translated =
+      phraseTranslations[language][value] ??
+      dataPhraseTranslations[language][value]
+
+    if (translated) {
+      return translated
+    }
+
+    if (value === profile.intro) {
+      return copy.home.intro
+    }
+
+    if (value.includes(" · ")) {
+      return value
+        .split(" · ")
+        .map((part) => t(part))
+        .join(" · ")
+    }
+
+    if (value.includes(" at ")) {
+      return value
+        .split(" at ")
+        .map((part) => t(part))
+        .join(` ${t("at")} `)
+    }
+
     return value
   }
 
-    return (
-      phraseTranslations[language][value] ??
-      dataPhraseTranslations[language][value] ??
-      value
-    )
-  }
-
   return (
-    <PortfolioLanguageContext.Provider value={{ language, setLanguage, copy, t }}>
-    <div className="min-h-svh bg-background text-foreground">
-      <div className="mx-auto flex w-full max-w-3xl flex-col px-0 pb-0 sm:px-6 lg:w-1/2 lg:min-w-[680px] lg:px-0">
-        <header className="line-solid sticky top-0 z-30 bg-background/92 px-3 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:mx-0 lg:border-x">
-          <div className="flex items-center justify-between gap-3">
-            <Link href="/" className="flex min-w-0 items-center gap-2.5">
-              <span className="line-solid relative size-8 shrink-0 overflow-hidden rounded-full border bg-muted">
-                <Image
-                  alt=""
-                  className="object-cover"
-                  fill
-                  sizes="32px"
-                  src={profile.avatar}
-                />
-              </span>
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-medium">
-                  {profile.brand}
+    <PortfolioLanguageContext.Provider
+      value={{ language, setLanguage, copy, t }}
+    >
+      <div className="min-h-svh bg-background text-foreground">
+        <div className="mx-auto flex w-full max-w-3xl flex-col px-0 pb-0 sm:px-6 lg:w-1/2 lg:min-w-[680px] lg:px-0">
+          <header className="line-solid sticky top-0 z-30 bg-background/92 px-3 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:mx-0 lg:border-x">
+            <div className="flex items-center justify-between gap-3">
+              <Link href="/" className="flex min-w-0 items-center gap-2.5">
+                <span className="line-solid relative size-8 shrink-0 overflow-hidden rounded-full border bg-muted">
+                  <Image
+                    alt=""
+                    className="object-cover"
+                    fill
+                    sizes="32px"
+                    src={profile.avatar}
+                  />
                 </span>
-                <span className="block truncate text-xs text-muted-foreground">
-                  {profile.role}
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium">
+                    {profile.brand}
+                  </span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {t(profile.role)}
+                  </span>
                 </span>
-              </span>
-            </Link>
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                className="line-solid hidden h-8 items-center gap-1.5 rounded-lg border bg-background px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
-                onClick={() => setSearchOpen(true)}
-              >
-                <Search className="size-3.5" />
-                {copy.search}
-                <span className="kbd-mark ml-1">⌘K</span>
-              </button>
-              <button
-                type="button"
-                className="line-solid flex size-8 items-center justify-center rounded-lg border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:hidden"
-                aria-label="Open search"
-                onClick={() => setSearchOpen(true)}
-              >
-                <Search className="size-3.5" />
-              </button>
-              <LanguageSwitch />
-              <ThemeSwitch />
-            </div>
-          </div>
-          <nav className="mt-3 flex items-center gap-1 overflow-x-auto">
-            {navItems.map((item) => {
-              const Icon = item.icon
-              const active = pathname === item.href
-              const label = copy.nav[item.label] ?? item.label
-
-              return (
-                <Link
-                  key={item.href}
-                  className={cn(
-                    "line-solid group/nav grid h-8 shrink-0 grid-cols-[2rem_0fr] items-center overflow-hidden rounded-lg border bg-background text-xs text-muted-foreground transition-[grid-template-columns,background-color,color,border-color] duration-300 ease-out hover:grid-cols-[2rem_1fr] hover:bg-muted hover:text-foreground focus-visible:grid-cols-[2rem_1fr] focus-visible:bg-muted focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-                    active
-                      ? "grid-cols-[2rem_1fr] border-border bg-secondary text-foreground"
-                      : ""
-                  )}
-                  data-active={active}
-                  aria-label={label}
-                  href={item.href}
+              </Link>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  className="line-solid hidden h-8 items-center gap-1.5 rounded-lg border bg-background px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:inline-flex"
+                  onClick={() => setSearchOpen(true)}
                 >
-                  <span className="flex size-8 shrink-0 items-center justify-center">
-                    <Icon className="size-3.5 transition-transform duration-300 group-hover/nav:scale-95" />
-                  </span>
-                  <span
-                    className={cn(
-                      "min-w-0 overflow-hidden whitespace-nowrap pr-0 opacity-0 transition-[opacity,transform,padding] duration-200 ease-out group-hover/nav:translate-x-0 group-hover/nav:pr-2 group-hover/nav:opacity-100 group-focus-visible/nav:translate-x-0 group-focus-visible/nav:pr-2 group-focus-visible/nav:opacity-100",
-                      active
-                        ? "translate-x-0 pr-2 opacity-100"
-                        : "-translate-x-1"
-                    )}
-                  >
-                    {label}
-                  </span>
-                </Link>
-              )
-            })}
-          </nav>
-        </header>
-        <main className="line-solid lg:border-x">{children}</main>
-        <footer className="line-solid lg:border-x">
-          <div className="line-dotted border-t px-3 py-4 text-xs text-muted-foreground sm:px-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p>{copy.footer}</p>
-              <FooterStats />
+                  <Search className="size-3.5" />
+                  {copy.search}
+                  <span className="kbd-mark ml-1">⌘K</span>
+                </button>
+                <button
+                  type="button"
+                  className="line-solid flex size-8 items-center justify-center rounded-lg border bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:hidden"
+                  aria-label={t("Open search")}
+                  onClick={() => setSearchOpen(true)}
+                >
+                  <Search className="size-3.5" />
+                </button>
+                <LanguageSwitch />
+                <ThemeSwitch />
+              </div>
             </div>
-          </div>
-          <div
-            className="flex h-11 justify-center overflow-hidden px-3 sm:h-16 sm:px-6"
-            aria-label="Nix Black"
-          >
-            <p className="select-none text-center text-[4rem] font-medium leading-none text-muted-foreground/20 sm:text-[6rem]">
-              nixblack
-            </p>
-          </div>
-        </footer>
+            <nav className="mt-3 flex items-center gap-1 overflow-x-auto">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                const active = pathname === item.href
+                const label = copy.nav[item.label] ?? item.label
+
+                return (
+                  <Link
+                    key={item.href}
+                    className={cn(
+                      "line-solid group/nav grid h-8 shrink-0 grid-cols-[2rem_0fr] items-center overflow-hidden rounded-lg border bg-background text-xs text-muted-foreground transition-[grid-template-columns,background-color,color,border-color] duration-300 ease-out hover:grid-cols-[2rem_1fr] hover:bg-muted hover:text-foreground focus-visible:grid-cols-[2rem_1fr] focus-visible:bg-muted focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none",
+                      active
+                        ? "grid-cols-[2rem_1fr] border-border bg-secondary text-foreground"
+                        : ""
+                    )}
+                    data-active={active}
+                    aria-label={label}
+                    href={item.href}
+                  >
+                    <span className="flex size-8 shrink-0 items-center justify-center">
+                      <Icon className="size-3.5 transition-transform duration-300 group-hover/nav:scale-95" />
+                    </span>
+                    <span
+                      className={cn(
+                        "min-w-0 overflow-hidden pr-0 whitespace-nowrap opacity-0 transition-[opacity,transform,padding] duration-200 ease-out group-hover/nav:translate-x-0 group-hover/nav:pr-2 group-hover/nav:opacity-100 group-focus-visible/nav:translate-x-0 group-focus-visible/nav:pr-2 group-focus-visible/nav:opacity-100",
+                        active
+                          ? "translate-x-0 pr-2 opacity-100"
+                          : "-translate-x-1"
+                      )}
+                    >
+                      {label}
+                    </span>
+                  </Link>
+                )
+              })}
+            </nav>
+          </header>
+          <main className="line-solid lg:border-x">{children}</main>
+          <footer className="line-solid lg:border-x">
+            <div className="line-dotted border-t px-3 py-4 text-xs text-muted-foreground sm:px-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p>{copy.footer}</p>
+                <FooterStats />
+              </div>
+            </div>
+            <div
+              className="flex h-11 justify-center overflow-hidden px-3 sm:h-16 sm:px-6"
+              aria-label="Nix Black"
+            >
+              <p className="text-center text-[4rem] leading-none font-medium text-muted-foreground/20 select-none sm:text-[6rem]">
+                nixblack
+              </p>
+            </div>
+          </footer>
+        </div>
+        {searchOpen ? <SearchDialog onOpenChange={setSearchOpen} /> : null}
+        <AssistantLauncher copy={copy.assistant} />
       </div>
-      {searchOpen ? <SearchDialog onOpenChange={setSearchOpen} /> : null}
-    </div>
     </PortfolioLanguageContext.Provider>
   )
 }
@@ -628,16 +938,17 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
 function FooterStats() {
   const { data: stats } = useVisitorStats()
   const { data: analytics } = useAnalyticsSummary()
+  const { copy } = usePortfolioLanguage()
   const total = analytics?.total ?? stats?.total
 
-return (
+  return (
     <Link
       href="/analytics"
       className="flex flex-wrap items-center gap-3 text-[11px] hover:underline"
     >
       <span className="inline-flex items-center gap-1.5">
         <Users className="size-3" />
-        {formatCompactStat(total)} total
+        {formatCompactStat(total)} {copy.total}
       </span>
       <span className="inline-flex items-center gap-1.5">
         <span className="relative flex size-2">
@@ -645,7 +956,7 @@ return (
           <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
         </span>
         <Activity className="size-3" />
-        {formatCompactStat(stats?.live)} online
+        {formatCompactStat(stats?.live)} {copy.online}
       </span>
     </Link>
   )
@@ -701,7 +1012,7 @@ function LanguageSwitch() {
         {languageLabels[language]}
       </button>
       {open ? (
-        <div className="line-solid absolute right-0 top-10 z-50 min-w-28 rounded-lg border bg-popover p-1 text-popover-foreground shadow-lg">
+        <div className="line-solid absolute top-10 right-0 z-50 min-w-28 rounded-lg border bg-popover p-1 text-popover-foreground shadow-lg">
           {(Object.keys(languageLabels) as LanguageCode[]).map((item) => (
             <button
               className={cn(
@@ -715,7 +1026,7 @@ function LanguageSwitch() {
                 setOpen(false)
               }}
             >
-              <span>{languageLabels[item]}</span>
+              <span>{copy.languages[item]}</span>
               <span className="text-muted-foreground">
                 {item.toUpperCase()}
               </span>
@@ -729,7 +1040,7 @@ function LanguageSwitch() {
 
 function ThemeSwitch() {
   const { theme, resolvedTheme, setTheme } = useTheme()
-  const { copy } = usePortfolioLanguage()
+  const { copy, t } = usePortfolioLanguage()
   const mounted = React.useSyncExternalStore(
     React.useCallback(() => () => {}, []),
     () => true,
@@ -757,7 +1068,7 @@ function ThemeSwitch() {
     <button
       type="button"
       className="line-solid flex h-8 min-w-8 items-center justify-center gap-1.5 rounded-lg border bg-background px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-      aria-label="Toggle theme"
+      aria-label={t("Toggle theme")}
       title={copy.theme[displayTheme]}
       onClick={cycleTheme}
     >
@@ -873,7 +1184,7 @@ function SearchDialog({
             className="h-9 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             placeholder={copy.searchShort}
           />
-          <span className="kbd-mark">Esc</span>
+          <span className="kbd-mark">{copy.escape}</span>
         </div>
         <div className="max-h-[56svh] overflow-y-auto p-2">
           {results.length > 0 ? (

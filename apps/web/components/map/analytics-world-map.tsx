@@ -4,6 +4,7 @@ import { Globe2 } from "lucide-react"
 import * as React from "react"
 
 import { cn } from "@workspace/ui/lib/utils"
+import { usePortfolioLanguage } from "@/components/portfolio/shell"
 import type { AnalyticsCountry } from "@/lib/analytics-data"
 
 type AnalyticsWorldMapProps = {
@@ -17,7 +18,11 @@ export function AnalyticsWorldMap({
   selectedCountry,
   onSelectCountry,
 }: AnalyticsWorldMapProps) {
-  const maxVisitors = Math.max(...countries.map((country) => country.visitors), 1)
+  const { copy } = usePortfolioLanguage()
+  const maxVisitors = Math.max(
+    ...countries.map((country) => country.visitors),
+    1
+  )
   const activeCountry = countries.find(
     (country) => country.country === selectedCountry
   )
@@ -30,7 +35,7 @@ export function AnalyticsWorldMap({
           className="size-full text-foreground"
           preserveAspectRatio="xMidYMid slice"
           role="img"
-          aria-label="World map showing analytics by country"
+          aria-label={copy.analytics.worldMapLabel}
         >
           <defs>
             <pattern
@@ -98,7 +103,7 @@ export function AnalyticsWorldMap({
       })}
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/90 to-transparent" />
-      <div className="pointer-events-none absolute left-3 top-3 rounded-md border border-border/70 bg-background/90 px-3 py-2 backdrop-blur">
+      <div className="pointer-events-none absolute top-3 left-3 rounded-md border border-border/70 bg-background/90 px-3 py-2 backdrop-blur">
         <p className="inline-flex items-center gap-1.5 text-xs font-medium">
           <Globe2 className="size-3.5 text-muted-foreground" />
           {activeCountry?.name ?? "Global traffic"}

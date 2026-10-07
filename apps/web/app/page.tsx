@@ -58,7 +58,7 @@ function HomeContent() {
               <span className="text-border">/</span>
               <IndiaTime />
             </p>
-            <h1 className="measure-text text-4xl font-medium leading-tight sm:text-5xl">
+            <h1 className="measure-text text-4xl leading-tight font-medium sm:text-5xl">
               {copy.home.heroName}
             </h1>
             <BioIntro intro={copy.home.intro} language={language} />
@@ -143,9 +143,7 @@ function HomeContent() {
               className="line-dotted flex items-center justify-between gap-3 border-b py-2 text-sm last:border-b-0 sm:last:border-b"
               key={shortcut.keys}
             >
-              <span className="text-muted-foreground">
-                {t(shortcut.label)}
-              </span>
+              <span className="text-muted-foreground">{t(shortcut.label)}</span>
               <span className="kbd-mark">{shortcut.keys}</span>
             </div>
           ))}
@@ -222,11 +220,13 @@ function InlineIcon({
 }
 
 function GithubGraph() {
+  const { t } = usePortfolioLanguage()
+
   return (
     <div className="line-solid overflow-hidden rounded-lg border bg-background p-3">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-xs font-medium uppercase text-muted-foreground">
-          GitHub activity
+        <p className="text-xs font-medium text-muted-foreground uppercase">
+          {t("GitHub activity")}
         </p>
         <a
           className="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
@@ -256,15 +256,17 @@ function GithubGraph() {
 }
 
 function LocationHoverCard() {
+  const { t } = usePortfolioLanguage()
+
   return (
     <span className="group/location relative inline-flex">
       <button
         type="button"
         className="rounded-md text-muted-foreground underline decoration-dotted underline-offset-4 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none"
       >
-        {profile.location}
+        {t(profile.location)}
       </button>
-      <span className="pointer-events-none absolute left-1/2 top-7 z-40 w-64 -translate-x-1/2 translate-y-1 rotate-[-8deg] rounded-lg border bg-popover p-2 text-popover-foreground opacity-0 shadow-xl transition-[opacity,transform] duration-200 group-hover/location:translate-y-0 group-hover/location:rotate-[-11deg] group-hover/location:opacity-100 group-focus-within/location:translate-y-0 group-focus-within/location:rotate-[-11deg] group-focus-within/location:opacity-100">
+      <span className="pointer-events-none absolute top-7 left-1/2 z-40 w-64 -translate-x-1/2 translate-y-1 rotate-[-8deg] rounded-lg border bg-popover p-2 text-popover-foreground opacity-0 shadow-xl transition-[opacity,transform] duration-200 group-focus-within/location:translate-y-0 group-focus-within/location:rotate-[-11deg] group-focus-within/location:opacity-100 group-hover/location:translate-y-0 group-hover/location:rotate-[-11deg] group-hover/location:opacity-100">
         <span className="relative block aspect-[4/3] overflow-hidden rounded-md bg-muted">
           <Image
             alt="Nainital hillside view"
@@ -275,8 +277,9 @@ function LocationHoverCard() {
           />
         </span>
         <span className="mt-2 block text-xs leading-5 text-muted-foreground">
-          Nainital sits at about 2,084m in the Kumaon hills. Lake air, sharp
-          light, and mountain silence do most of the design work.
+          {t(
+            "Nainital sits at about 2,084m in the Kumaon hills. Lake air, sharp light, and mountain silence do most of the design work."
+          )}
         </span>
       </span>
     </span>

@@ -35,7 +35,7 @@ function ContactContent() {
         <p className="text-sm text-muted-foreground">
           {copy.home.contactEyebrow}
         </p>
-        <h1 className="measure-text mt-3 text-4xl font-medium leading-tight sm:text-5xl">
+        <h1 className="measure-text mt-3 text-4xl leading-tight font-medium sm:text-5xl">
           {copy.home.contactTitle}
         </h1>
         <p className="measure-text mt-5 text-base leading-7 text-muted-foreground">
@@ -62,7 +62,10 @@ function ContactContent() {
       </PageBlock>
 
       <PageBlock className="border-b-0">
-        <SectionHeader eyebrow="Message" title="Send a message" />
+        <SectionHeader
+          eyebrow={copy.contact.messageEyebrow}
+          title={copy.contact.messageTitle}
+        />
         <ContactForm />
       </PageBlock>
     </>
@@ -70,6 +73,7 @@ function ContactContent() {
 }
 
 function ContactForm() {
+  const { copy } = usePortfolioLanguage()
   const form = useForm<ContactFormValues>({
     defaultValues: {
       name: "",
@@ -79,7 +83,7 @@ function ContactForm() {
       company: "",
     },
   })
-  const mutation = useSendContactMessage()
+  const mutation = useSendContactMessage(copy.contact)
 
   const onSubmit = form.handleSubmit(
     (values) => {
@@ -88,8 +92,8 @@ function ContactForm() {
       })
     },
     () => {
-      toast.error("Please check the required fields", {
-        description: "Name, email, and message are needed.",
+      toast.error(copy.contact.requiredError, {
+        description: copy.contact.requiredErrorDescription,
       })
     }
   )
@@ -97,7 +101,7 @@ function ContactForm() {
   return (
     <form className="space-y-5" onSubmit={onSubmit}>
       <label className="sr-only" htmlFor="company">
-        Company
+        {copy.contact.company}
       </label>
       <input
         className="hidden"
@@ -109,26 +113,26 @@ function ContactForm() {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
-          label="Full Name *"
+          label={copy.contact.fullName}
           name="name"
-          placeholder="Full Name"
+          placeholder={copy.contact.fullNamePlaceholder}
           autoComplete="name"
           register={form.register}
           required
         />
         <Field
-          label="Phone"
+          label={copy.contact.phone}
           name="phone"
-          placeholder="Phone No"
+          placeholder={copy.contact.phonePlaceholder}
           autoComplete="tel"
           register={form.register}
         />
       </div>
 
       <Field
-        label="Email *"
+        label={copy.contact.email}
         name="email"
-        placeholder="you@example.com"
+        placeholder={copy.contact.emailPlaceholder}
         type="email"
         autoComplete="email"
         register={form.register}
@@ -137,21 +141,24 @@ function ContactForm() {
 
       <label className="block">
         <span className="mb-2 block text-sm font-medium text-muted-foreground">
-          Message *
+          {copy.contact.message}
         </span>
         <textarea
-          className="line-solid min-h-64 w-full resize-y rounded-[1.5rem] border bg-background px-5 py-4 text-base leading-7 outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/20"
-          placeholder="Tell me about your project or just say hi..."
+          className="line-solid min-h-64 w-full resize-y rounded-[1.5rem] border bg-background px-5 py-4 text-base leading-7 transition-colors outline-none placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/20"
+          placeholder={copy.contact.messagePlaceholder}
           {...form.register("message", { required: true })}
         />
       </label>
 
       <button
-        className={cn(buttonVariants(), "h-14 w-full rounded-[1.5rem] text-base")}
+        className={cn(
+          buttonVariants(),
+          "h-14 w-full rounded-[1.5rem] text-base"
+        )}
         type="submit"
         disabled={mutation.isPending}
       >
-        {mutation.isPending ? "Sending..." : "Send message"}
+        {mutation.isPending ? copy.contact.sending : copy.contact.send}
         {mutation.isPending ? null : <Send className="size-4" />}
       </button>
     </form>
@@ -181,7 +188,7 @@ function Field({
         {label}
       </span>
       <input
-        className="line-solid h-14 w-full rounded-[1.5rem] border bg-background px-5 text-base outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/20"
+        className="line-solid h-14 w-full rounded-[1.5rem] border bg-background px-5 text-base transition-colors outline-none placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/20"
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}

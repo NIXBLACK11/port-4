@@ -35,12 +35,21 @@ import {
   recommendations,
   shortcuts,
 } from "@/lib/portfolio-data"
+import { getPersonJsonLd, serializeJsonLd } from "@/lib/agent-readiness"
 
 export default function Page() {
   return (
-    <PortfolioShell>
-      <HomeContent />
-    </PortfolioShell>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(getPersonJsonLd()),
+        }}
+      />
+      <PortfolioShell>
+        <HomeContent />
+      </PortfolioShell>
+    </>
   )
 }
 

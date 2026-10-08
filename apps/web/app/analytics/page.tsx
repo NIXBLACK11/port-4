@@ -72,11 +72,11 @@ function AnalyticsContent() {
         ) : null}
       </PageBlock>
 
-      <PageBlock className="py-0">
+      <PageBlock className="px-0 py-0">
         {isLoading ? <LoadingPanel /> : null}
         {isError ? <ErrorPanel /> : null}
         {analytics ? (
-          <div className="line-solid overflow-hidden rounded-lg border bg-background">
+          <div className="overflow-hidden bg-background">
             <div className="grid sm:grid-cols-3">
               <StatCard
                 icon={Eye}
@@ -432,26 +432,24 @@ function DimensionList({
 
 function LoadingPanel() {
   return (
-    <div className="space-y-3 py-8">
-      <div className="line-solid overflow-hidden rounded-lg border bg-background">
-        <div className="grid sm:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div
-              className="line-solid border-b p-4 sm:border-r sm:border-b-0 sm:last:border-r-0"
-              key={`stat-skeleton-${index}`}
-            >
-              <div className="flex items-center justify-between gap-3">
-                <Skeleton className="h-3 w-20" />
-                <Skeleton className="size-4 rounded-full" />
-              </div>
-              <Skeleton className="mt-6 h-10 w-24" />
-              <Skeleton className="mt-2 h-3 w-28" />
+    <div className="overflow-hidden bg-background">
+      <div className="grid sm:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div
+            className="line-solid border-b p-4 sm:border-r sm:border-b-0 sm:last:border-r-0"
+            key={`stat-skeleton-${index}`}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="size-4 rounded-full" />
             </div>
-          ))}
-        </div>
-        <div className="line-solid border-t p-4">
-          <Skeleton className="h-64 w-full" />
-        </div>
+            <Skeleton className="mt-6 h-10 w-24" />
+            <Skeleton className="mt-2 h-3 w-28" />
+          </div>
+        ))}
+      </div>
+      <div className="line-solid border-t p-4">
+        <Skeleton className="h-64 w-full rounded-none" />
       </div>
     </div>
   )

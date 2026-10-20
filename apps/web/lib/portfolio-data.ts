@@ -53,6 +53,7 @@ export type Experience = {
   details: string[]
   stack: string[]
   image: string
+  externalHref?: string
 }
 
 export type Education = {
@@ -136,6 +137,9 @@ export const experiences: Experience[] = sourceExperiences.map((experience) => (
   details: experience.description,
   stack: experience.skills.map((skill) => skill.text),
   image: experience.logo,
+  externalHref:
+    experience.socials.find((social) => social.type === "site")?.link ??
+    experience.socials[0]?.link,
 }))
 
 export const education: Education[] = sourceEducation.map((item) => ({

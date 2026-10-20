@@ -266,6 +266,7 @@ export function ExperienceRow({
         <DetailModal
           details={experience.details}
           eyebrow={`${t("Experience")} · ${t(experience.period)}`}
+          externalHref={experience.externalHref}
           image={experience.image}
           imageMode="icon"
           stack={experience.stack}
@@ -475,6 +476,8 @@ function DetailModal({
                 "mt-6"
               )}
               href={externalHref}
+              target="_blank"
+              rel="noopener noreferrer"
             >
                 {copy.open}
               <ExternalLink />

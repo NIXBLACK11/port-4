@@ -1,25 +1,5 @@
 export const projects = [
   {
-    projectTitle: 'Nixarcade',
-    description: [
-      'Founded and developed Nixarcade, a Solana-powered multiplayer gaming platform.',
-      'Architected Nixarcade using Solana libraries, enabling decentralized transactions for a gaming dApp.',
-      'Secured funding from Solana Foundation and CoinDCX for development of the platform.',
-    ],
-    links: [
-      { type: 'site', url: 'https://nixarcade.vercel.app' },
-      { type: 'twitter', url: 'https://twitter.com/NIXARCADE' },
-    ],
-    projPhoto: '/projects/nixarcade.png',
-    skills: [
-      { icon: '/skills/solana.png', text: 'Solana-web3.js' },
-      { icon: '/skills/ts.png', text: 'TypeScript' },
-      { icon: '/skills/react.png', text: 'React' },
-      { icon: '/skills/ws.svg', text: 'Web-Socket' },
-      { icon: '/skills/express.png', text: 'Express' },
-    ],
-  },
-  {
     projectTitle: 'CrowdVault',
     description: [
       'Built a completely on-chain fundraising platform for creating, sharing, and donating to campaigns.',
@@ -48,6 +28,22 @@ export const projects = [
     skills: [
       { icon: '/skills/go.png', text: 'Golang' },
       { icon: '/skills/mux.png', text: 'Mux' },
+    ],
+  },
+  {
+    projectTitle: 'NixPay',
+    description: [
+      'Built a crypto payment gateway with multi-token payments, analytics, webhooks, and merchant notifications.',
+      'Integrated the Jupiter Swap API to automatically convert supported Solana tokens into USDC.',
+      'Developed and published an NPM SDK to simplify payment integration for external applications.',
+    ],
+    links: [{ type: 'site', url: 'https://pay.nixblack.site/' }],
+    projPhoto: '/projects/nixpay.png',
+    skills: [
+      { icon: '/skills/ts.png', text: 'TypeScript' },
+      { icon: '/skills/next.png', text: 'Next.js' },
+      { icon: '/skills/solana.png', text: 'Solana' },
+      { icon: '/skills/jupiter.png', text: 'Jupiter API' },
     ],
   },
   {
@@ -82,22 +78,6 @@ export const projects = [
       { icon: '/skills/tailwind.png', text: 'Tailwind' },
       { icon: '/skills/ts.png', text: 'TypeScript' },
       { icon: '/skills/solana.png', text: 'Solana' },
-    ],
-  },
-  {
-    projectTitle: 'NixPay',
-    description: [
-      'Built a crypto payment gateway with multi-token payments, analytics, webhooks, and merchant notifications.',
-      'Integrated the Jupiter Swap API to automatically convert supported Solana tokens into USDC.',
-      'Developed and published an NPM SDK to simplify payment integration for external applications.',
-    ],
-    links: [{ type: 'site', url: 'https://pay.nixblack.site/' }],
-    projPhoto: '/projects/nixpay.png',
-    skills: [
-      { icon: '/skills/ts.png', text: 'TypeScript' },
-      { icon: '/skills/next.png', text: 'Next.js' },
-      { icon: '/skills/solana.png', text: 'Solana' },
-      { icon: '/skills/jupiter.png', text: 'Jupiter API' },
     ],
   },
   {

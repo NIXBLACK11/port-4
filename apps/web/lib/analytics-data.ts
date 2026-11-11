@@ -124,12 +124,17 @@ function fallbackCountryMeta(code: string) {
   }
 
   return {
-    name: code || "Unknown",
+    name: countryName(code),
     x: 16 + (hash % 68),
     y: 26 + ((hash * 7) % 50),
     lng: -160 + (hash % 320),
     lat: -55 + ((hash * 7) % 115),
   }
+}
+
+function countryName(code: string) {
+  if (!/^[A-Z]{2}$/.test(code)) return code || "Unknown"
+  return new Intl.DisplayNames(["en"], { type: "region" }).of(code) ?? code
 }
 
 function countryRow(country: string, pageviews: number, visitors: number) {

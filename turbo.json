@@ -5,7 +5,8 @@
     "TELEGRAM_BOT_TOKEN",
     "TELEGRAM_CHAT_ID",
     "VERCEL_TOKEN",
-    "VERCEL_PROJECT_ID"
+    "VERCEL_PROJECT_ID",
+    "VERCEL_TEAM_ID"
   ],
   "tasks": {
     "build": {

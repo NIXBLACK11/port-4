@@ -41,7 +41,7 @@ function AnalyticsContent() {
   const [rangeDays, setRangeDays] = React.useState(30)
   const { data, isLoading, isError } = useAnalytics(rangeDays)
   const analytics = data
-  const [selectedCountry, setSelectedCountry] = React.useState("IN")
+  const [selectedCountry, setSelectedCountry] = React.useState("")
 
   const selected =
     analytics?.countries.find(
@@ -72,7 +72,7 @@ function AnalyticsContent() {
         ) : null}
       </PageBlock>
 
-      <PageBlock className="px-0 py-0">
+      <PageBlock className="px-0 py-0 sm:px-0">
         {isLoading ? <LoadingPanel /> : null}
         {isError ? <ErrorPanel /> : null}
         {analytics ? (
@@ -93,8 +93,10 @@ function AnalyticsContent() {
               <StatCard
                 icon={Radio}
                 label={copy.analytics.topCountry}
-                value={selected?.visitors ?? 0}
-                note={selected?.name ?? copy.analytics.waitingForData}
+                value={analytics.countries[0]?.visitors ?? 0}
+                note={
+                  analytics.countries[0]?.name ?? copy.analytics.waitingForData
+                }
               />
             </div>
             <LineChart data={analytics.daily} />
@@ -102,35 +104,18 @@ function AnalyticsContent() {
         ) : null}
       </PageBlock>
 
-      {/* {analytics ? (
+      {analytics ? (
         <>
-          <PageBlock>
-            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-xs font-medium uppercase text-muted-foreground">
-                  Map
-                </p>
-                <h2 className="mt-1 text-xl font-medium tracking-normal sm:text-2xl">
-                  Countries
-                </h2>
-              </div>
-              <CountryStrip
-                countries={analytics.countries}
-                selectedCountry={activeCountry}
-                onSelectCountry={setSelectedCountry}
-              />
-            </div>
-            <div className="grid gap-3 xl:grid-cols-[minmax(0,1fr)_280px]">
-              <AnalyticsWorldMap
-                countries={analytics.countries}
-                selectedCountry={activeCountry}
-                onSelectCountry={setSelectedCountry}
-              />
-              {selected ? <CountryDetail country={selected} /> : null}
-            </div>
+          <PageBlock className="px-0 py-0 sm:px-0">
+            <AnalyticsWorldMap
+              countries={analytics.countries}
+              selectedCountry={activeCountry}
+              onSelectCountry={setSelectedCountry}
+            />
+            {selected ? <CountryDetail country={selected} /> : null}
           </PageBlock>
 
-          <PageBlock>
+          {/* <PageBlock>
             <SectionHeader
               eyebrow={copy.analytics.breakdown}
               title={copy.analytics.devicesAndReferrers}
@@ -147,9 +132,9 @@ function AnalyticsContent() {
                 items={analytics.referrers}
               />
             </div>
-          </PageBlock>
+          </PageBlock> */}
         </>
-      ) : null} */}
+      ) : null}
     </>
   )
 }
@@ -226,51 +211,11 @@ function StatCard({
   )
 }
 
-function CountryStrip({
-  countries,
-  selectedCountry,
-  onSelectCountry,
-}: {
-  countries: AnalyticsCountry[]
-  selectedCountry: string
-  onSelectCountry: (country: string) => void
-}) {
-  const { copy } = usePortfolioLanguage()
-
-  if (countries.length === 0) {
-    return (
-      <p className="text-xs text-muted-foreground">
-        {copy.analytics.noCountryData}
-      </p>
-    )
-  }
-
-  return (
-    <div className="flex max-w-full gap-1.5 overflow-x-auto pb-1">
-      {countries.map((country) => (
-        <Button
-          className="h-8 gap-2 rounded-md px-2.5 text-xs"
-          key={country.country}
-          type="button"
-          size="sm"
-          variant={country.country === selectedCountry ? "default" : "outline"}
-          onClick={() => onSelectCountry(country.country)}
-        >
-          <span>{country.country}</span>
-          <span className="text-current/60">
-            {formatNumber(country.visitors)}
-          </span>
-        </Button>
-      ))}
-    </div>
-  )
-}
-
 function CountryDetail({ country }: { country: AnalyticsCountry }) {
   const { copy } = usePortfolioLanguage()
 
   return (
-    <div className="line-solid rounded-lg border bg-background p-4 xl:min-h-[460px]">
+    <div className="line-solid flex flex-col gap-4 border-t bg-background p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm font-medium">{country.name}</p>
@@ -278,9 +223,8 @@ function CountryDetail({ country }: { country: AnalyticsCountry }) {
             {country.country} {copy.analytics.selected}
           </p>
         </div>
-        <Globe2 className="size-4 text-muted-foreground" />
       </div>
-      <div className="mt-8 grid gap-3">
+      <div className="grid grid-cols-2 gap-6 sm:min-w-64">
         <Metric label={copy.analytics.visitors} value={country.visitors} />
         <Metric label={copy.analytics.pageviews} value={country.pageviews} />
       </div>

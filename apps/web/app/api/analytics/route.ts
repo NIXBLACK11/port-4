@@ -33,21 +33,32 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const days = parseInteger(searchParams.get("days"), 30)
   const range = dateRange(days)
-  const payload = await getAnalytics(range)
 
   if (searchParams.get("scope") === "summary") {
+    const token = process.env.VERCEL_TOKEN
+    const projectId = process.env.VERCEL_PROJECT_ID
+    const totals =
+      token && projectId
+        ? await fetchCount(token, projectId, range)
+        : { pageviews: 0, visitors: 0 }
+
     return Response.json({
-      configured: payload.configured,
-      total: payload.totals.visitors,
-      pageviews: payload.totals.pageviews,
-      generatedAt: payload.generatedAt,
+      configured: Boolean(token && projectId),
+      total: totals.visitors,
+      pageviews: totals.pageviews,
+      generatedAt: new Date().toISOString(),
     })
   }
 
+  const payload = await getAnalytics(range)
   return Response.json(payload)
 }
 
-async function getAnalytics(range: { since: string; until: string; days: number }) {
+async function getAnalytics(range: {
+  since: string
+  until: string
+  days: number
+}) {
   const token = process.env.VERCEL_TOKEN
   const projectId = process.env.VERCEL_PROJECT_ID
 
@@ -57,7 +68,8 @@ async function getAnalytics(range: { since: string; until: string; days: number 
 
   const [totals, countries, daily, devices, referrers] = await Promise.all([
     fetchCount(token, projectId, range),
-    fetchAggregate(token, projectId, range, "country", "12"),
+    // Vercel rejects aggregate limits above 100; additional rows roll into Others.
+    fetchAggregate(token, projectId, range, "country", "100"),
     fetchAggregate(token, projectId, range, "day", String(range.days)),
     fetchAggregate(token, projectId, range, "deviceType", "5"),
     fetchAggregate(token, projectId, range, "referrerHostname", "6"),
@@ -70,7 +82,7 @@ async function getAnalytics(range: { since: string; until: string; days: number 
     totals,
     countries: countries
       .map((row) => {
-        const code = row.country ?? "Unknown"
+        const code = row.country?.trim().toUpperCase() || "Unknown"
         const meta = countryFromCode(code)
 
         return {
@@ -135,13 +147,17 @@ async function fetchAggregate(
   by: string,
   limit: string
 ) {
-  const data = await fetchVercel<VercelAggregateResponse>(token, "visits/aggregate", {
-    projectId,
-    since: range.since,
-    until: range.until,
-    by,
-    limit,
-  })
+  const data = await fetchVercel<VercelAggregateResponse>(
+    token,
+    "visits/aggregate",
+    {
+      projectId,
+      since: range.since,
+      until: range.until,
+      by,
+      limit,
+    }
+  )
 
   return data.data ?? []
 }
@@ -152,6 +168,8 @@ async function fetchVercel<T>(
   params: Record<string, string | undefined>
 ) {
   const url = new URL(`${apiBase}/${endpoint}`)
+  const teamId = process.env.VERCEL_TEAM_ID
+  if (teamId) url.searchParams.set("teamId", teamId)
 
   for (const [key, value] of Object.entries(params)) {
     if (value) {
@@ -167,7 +185,13 @@ async function fetchVercel<T>(
   })
 
   if (!response.ok) {
-    throw new Error(`Vercel analytics request failed with ${response.status}`)
+    const body = await response.json().catch(() => null)
+    const message =
+      typeof body?.error?.message === "string" ? `: ${body.error.message}` : ""
+    const dimension = params.by ? ` (${params.by})` : ""
+    throw new Error(
+      `Vercel analytics ${endpoint}${dimension} failed with ${response.status}${message}`
+    )
   }
 
   return (await response.json()) as T

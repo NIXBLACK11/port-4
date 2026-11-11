@@ -121,6 +121,20 @@ type PortfolioCopy = {
     devicesAndReferrers: string
     devices: string
     referrers: string
+    geography: string
+    countries: string
+    hoverCountry: string
+    projection: string
+    mapHint: string
+    fewerVisitors: string
+    moreVisitors: string
+    mapLoadError: string
+    retry: string
+    rotateLeft: string
+    rotateRight: string
+    zoomIn: string
+    zoomOut: string
+    resetMap: string
     worldMapLabel: string
     noData: string
     loadError: string
@@ -255,6 +269,20 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       devicesAndReferrers: "Devices and referrers",
       devices: "Devices",
       referrers: "Referrers",
+      geography: "Geography",
+      countries: "Countries",
+      hoverCountry: "Hover a country to explore its traffic.",
+      projection: "Projection",
+      mapHint: "Drag to pan. Use the controls to zoom.",
+      fewerVisitors: "Fewer",
+      moreVisitors: "More",
+      mapLoadError: "The world map could not be loaded.",
+      retry: "Try again",
+      rotateLeft: "Rotate globe left",
+      rotateRight: "Rotate globe right",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out",
+      resetMap: "Reset map",
       worldMapLabel: "World map showing analytics by country",
       noData: "No data for this range.",
       loadError: "Analytics could not be loaded right now.",
@@ -391,6 +419,21 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       devicesAndReferrers: "Devices aur referrers",
       devices: "Devices",
       referrers: "Referrers",
+      geography: "Geography",
+      countries: "Countries",
+      hoverCountry: "Traffic dekhne ke liye country par hover karein.",
+      projection: "Projection",
+      mapHint:
+        "Pan karne ke liye drag karein. Zoom ke liye controls use karein.",
+      fewerVisitors: "Kam",
+      moreVisitors: "Zyada",
+      mapLoadError: "World map load nahi ho paya.",
+      retry: "Dobara try karein",
+      rotateLeft: "Globe baayein ghumayein",
+      rotateRight: "Globe daayein ghumayein",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out",
+      resetMap: "Map reset karein",
       worldMapLabel: "Country ke hisaab se analytics dikhane wala world map",
       noData: "Is range ke liye data nahi hai.",
       loadError: "Analytics abhi load nahi ho paya.",
@@ -522,6 +565,20 @@ const portfolioCopy: Record<LanguageCode, PortfolioCopy> = {
       devicesAndReferrers: "デバイスと参照元",
       devices: "デバイス",
       referrers: "参照元",
+      geography: "地域",
+      countries: "国別アクセス",
+      hoverCountry: "国にカーソルを合わせるとアクセス数を表示します。",
+      projection: "投影法",
+      mapHint: "ドラッグで移動、ボタンでズームできます。",
+      fewerVisitors: "少ない",
+      moreVisitors: "多い",
+      mapLoadError: "世界地図を読み込めませんでした。",
+      retry: "再試行",
+      rotateLeft: "地球を左に回転",
+      rotateRight: "地球を右に回転",
+      zoomIn: "拡大",
+      zoomOut: "縮小",
+      resetMap: "地図をリセット",
       worldMapLabel: "国別の analytics を表示する世界地図",
       noData: "この期間のデータはありません。",
       loadError: "現在、Analytics を読み込めません。",

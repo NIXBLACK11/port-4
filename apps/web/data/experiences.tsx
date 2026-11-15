@@ -3,7 +3,7 @@ export const experiences = [
     company: 'Stealth Startup',
     logo: '/globe.svg',
     location: 'Remote, Europe',
-    role: 'Full Stack Engineer',
+    role: 'Founding Engineer',
     period: 'May(2026) — PRESENT',
     description: [
       'Built products end-to-end as one of 2 engineers across web, mobile, backend, and AI systems.',

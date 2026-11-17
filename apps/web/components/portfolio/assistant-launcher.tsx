@@ -4,6 +4,8 @@ import { useState } from "react"
 import { PiArrowSquareOut, PiOpenAiLogo } from "react-icons/pi"
 import { SiClaude, SiPerplexity } from "react-icons/si"
 
+import { portfolioAssistantPrompt } from "@/lib/agent-readiness"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,10 +16,7 @@ import {
 } from "@workspace/ui/components/dropdown-menu"
 import { Shdr24 } from "@workspace/ui/components/shdr-24"
 
-const portfolioPrompt =
-  "You are helping me understand Siddharth Singh Rana's portfolio. Review https://nixblack.com and answer questions about his projects, writing, education, contact information, and experience."
-
-const encodedPrompt = encodeURIComponent(portfolioPrompt)
+const encodedPrompt = encodeURIComponent(portfolioAssistantPrompt)
 
 const assistantLinks = [
   {

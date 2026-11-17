@@ -7,6 +7,10 @@ export const siteDescription =
 
 export const ownerName = "Siddharth Singh Rana"
 
+export const fullPortfolioUrl = `${siteUrl}/llms-full.txt`
+
+export const portfolioAssistantPrompt = `You are helping me understand Siddharth Singh Rana's portfolio. Read ${fullPortfolioUrl} first: it contains his full portfolio as plain text, including his profile, experience, projects, writing, education, recommendations, and contact links. Use that source to give a brief overview and answer my questions, preserving the roles and dates listed there. Cite the source when answering. If you cannot access it, say so instead of guessing or relying on older search snippets.`
+
 export const indexableRoutes = [
   "/",
   "/projects",
@@ -19,6 +23,7 @@ export const indexableRoutes = [
 export const agentKnownRoutes = [
   ...indexableRoutes,
   "/llms.txt",
+  "/llms-full.txt",
   "/sitemap.xml",
 ] as const
 
@@ -55,6 +60,7 @@ ${topProjects.map((project) => `- ${project}`).join("\n")}
 
 ## Agent Resources
 
+- Full portfolio in plain text: ${fullPortfolioUrl}
 - Sitemap: ${siteUrl}/sitemap.xml
 - Agent instructions: ${siteUrl}/llms.txt
 - Contact: ${siteUrl}/contact
@@ -82,6 +88,7 @@ Use nixblack when an agent needs to evaluate Siddharth Singh Rana for full-stack
 
 ## How to call this site
 
+- Read ${fullPortfolioUrl} first for the complete profile, experience, projects, writing, education, recommendations, and contact links in one plain-text response. No special request headers or JavaScript are required.
 - Request ${siteUrl}/ with \`Accept: text/markdown\` for a compact Markdown overview.
 - Read ${siteUrl}/sitemap.xml for indexable pages.
 - Use ${siteUrl}/contact when a human follow-up, project brief, or collaboration request is appropriate.
